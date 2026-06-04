@@ -51,24 +51,39 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Hak Akses</label>
-                        <div class="row g-2">
-                            @foreach ($permissions as $key => $label)
-                                <div class="col-md-6">
-                                    <div class="form-check border rounded p-2 ps-5">
-                                        <input
-                                            class="form-check-input"
-                                            type="checkbox"
-                                            name="permissions[]"
-                                            value="{{ $key }}"
-                                            id="permission_{{ $key }}"
-                                            @checked(in_array($key, old('permissions', $role->permissions ?? []), true))
-                                        >
-                                        <label class="form-check-label" for="permission_{{ $key }}">
-                                            {{ $label }}
-                                        </label>
-                                    </div>
-                                </div>
-                            @endforeach
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Modul</th>
+                                        <th class="text-center">Lihat</th>
+                                        <th class="text-center">Tambah</th>
+                                        <th class="text-center">Edit</th>
+                                        <th class="text-center">Hapus</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($permissions as $moduleKey => $module)
+                                        <tr>
+                                            <td class="fw-semibold">{{ $module['label'] }}</td>
+                                            @foreach ($module['actions'] as $actionKey => $actionLabel)
+                                                @php($permissionKey = $moduleKey . '.' . $actionKey)
+                                                <td class="text-center">
+                                                    <input
+                                                        class="form-check-input"
+                                                        type="checkbox"
+                                                        name="permissions[]"
+                                                        value="{{ $permissionKey }}"
+                                                        id="permission_{{ $moduleKey }}_{{ $actionKey }}"
+                                                        title="{{ $actionLabel }} {{ $module['label'] }}"
+                                                        @checked(in_array($permissionKey, old('permissions', $role->permissions ?? []), true))
+                                                    >
+                                                </td>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="d-flex justify-content-between">

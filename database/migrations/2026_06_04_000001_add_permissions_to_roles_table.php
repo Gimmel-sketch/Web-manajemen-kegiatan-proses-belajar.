@@ -15,7 +15,15 @@ return new class extends Migration
             }
         });
 
-        $allPermissions = json_encode(array_keys(config('permissions')));
+        $permissions = [];
+
+        foreach (config('permissions') as $moduleKey => $module) {
+            foreach (array_keys($module['actions']) as $actionKey) {
+                $permissions[] = $moduleKey . '.' . $actionKey;
+            }
+        }
+
+        $allPermissions = json_encode($permissions);
 
         DB::table('roles')
             ->whereIn('name', ['admin', 'editor'])

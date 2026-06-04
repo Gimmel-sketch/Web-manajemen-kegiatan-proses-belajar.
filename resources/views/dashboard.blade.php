@@ -7,23 +7,23 @@
     $user = auth()->user();
     $roleName = $user->role?->display_name ?? 'Belum ada role';
     $cards = [
-        ['label' => 'Mahasiswa', 'value' => $totalMahasiswa, 'route' => route('Data-mahasiswa'), 'button' => 'Lihat data', 'permission' => 'manage_mahasiswa'],
-        ['label' => 'Mata Kuliah', 'value' => $totalMataKuliah, 'route' => route('mata-kuliah.index'), 'button' => 'Kelola', 'permission' => 'manage_mata_kuliah'],
-        ['label' => 'Dosen', 'value' => $totalDosen, 'route' => route('dosen.index'), 'button' => 'Kelola', 'permission' => 'manage_dosen'],
-        ['label' => 'Ruangan', 'value' => $totalRuangan, 'route' => route('ruangan.index'), 'button' => 'Kelola', 'permission' => 'manage_ruangan'],
-        ['label' => 'Buku', 'value' => $totalBuku, 'route' => route('buku.index'), 'button' => 'Kelola', 'permission' => 'manage_buku'],
-        ['label' => 'Transaksi KRS', 'value' => $totalKrs, 'route' => route('transaksi-krs.index'), 'button' => 'Lihat transaksi', 'permission' => 'manage_krs'],
-        ['label' => 'Jadwal Perkuliahan', 'value' => $totalJadwalPerkuliahan, 'route' => route('jadwal-perkuliahan.index'), 'button' => 'Kelola', 'permission' => 'manage_jadwal_perkuliahan'],
-        ['label' => 'Presensi', 'value' => $totalPresensiPerkuliahan, 'route' => route('presensi-perkuliahan.index'), 'button' => 'Kelola', 'permission' => 'manage_presensi_perkuliahan'],
-        ['label' => 'Nilai', 'value' => $totalNilaiPerkuliahan, 'route' => route('nilai-perkuliahan.index'), 'button' => 'Kelola', 'permission' => 'manage_nilai_perkuliahan'],
-        ['label' => 'Pembayaran UKT', 'value' => $totalPembayaranUkt, 'route' => route('pembayaran-ukt.index'), 'button' => 'Lihat transaksi', 'permission' => 'manage_pembayaran_ukt'],
-        ['label' => 'Peminjaman Buku', 'value' => $totalPeminjamanBuku, 'route' => route('peminjaman-buku.index'), 'button' => 'Lihat transaksi', 'permission' => 'manage_peminjaman_buku'],
+        ['label' => 'Mahasiswa', 'value' => $totalMahasiswa, 'route' => route('Data-mahasiswa'), 'button' => 'Lihat data', 'permission' => 'mahasiswa.view'],
+        ['label' => 'Mata Kuliah', 'value' => $totalMataKuliah, 'route' => route('mata-kuliah.index'), 'button' => 'Kelola', 'permission' => 'mata_kuliah.view'],
+        ['label' => 'Dosen', 'value' => $totalDosen, 'route' => route('dosen.index'), 'button' => 'Kelola', 'permission' => 'dosen.view'],
+        ['label' => 'Ruangan', 'value' => $totalRuangan, 'route' => route('ruangan.index'), 'button' => 'Kelola', 'permission' => 'ruangan.view'],
+        ['label' => 'Buku', 'value' => $totalBuku, 'route' => route('buku.index'), 'button' => 'Kelola', 'permission' => 'buku.view'],
+        ['label' => 'Transaksi KRS', 'value' => $totalKrs, 'route' => route('transaksi-krs.index'), 'button' => 'Lihat transaksi', 'permission' => 'krs.view'],
+        ['label' => 'Jadwal Perkuliahan', 'value' => $totalJadwalPerkuliahan, 'route' => route('jadwal-perkuliahan.index'), 'button' => 'Kelola', 'permission' => 'jadwal_perkuliahan.view'],
+        ['label' => 'Presensi', 'value' => $totalPresensiPerkuliahan, 'route' => route('presensi-perkuliahan.index'), 'button' => 'Kelola', 'permission' => 'presensi_perkuliahan.view'],
+        ['label' => 'Nilai', 'value' => $totalNilaiPerkuliahan, 'route' => route('nilai-perkuliahan.index'), 'button' => 'Kelola', 'permission' => 'nilai_perkuliahan.view'],
+        ['label' => 'Pembayaran UKT', 'value' => $totalPembayaranUkt, 'route' => route('pembayaran-ukt.index'), 'button' => 'Lihat transaksi', 'permission' => 'pembayaran_ukt.view'],
+        ['label' => 'Peminjaman Buku', 'value' => $totalPeminjamanBuku, 'route' => route('peminjaman-buku.index'), 'button' => 'Lihat transaksi', 'permission' => 'peminjaman_buku.view'],
     ];
 
     $cards = array_values(array_filter($cards, fn ($card) => $user->hasPermission($card['permission'])));
 
-    if ($user->hasRole(['admin', 'editor']) && $user->hasPermission('manage_roles')) {
-        $cards[] = ['label' => 'Roles', 'value' => $totalRoles, 'route' => route('roles.index'), 'button' => 'Atur akses', 'permission' => 'manage_roles'];
+    if ($user->hasRole(['admin', 'editor']) && $user->hasPermission('roles.view')) {
+        $cards[] = ['label' => 'Roles', 'value' => $totalRoles, 'route' => route('roles.index'), 'button' => 'Atur akses', 'permission' => 'roles.view'];
     }
 @endphp
 

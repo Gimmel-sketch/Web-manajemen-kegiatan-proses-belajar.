@@ -109,11 +109,24 @@
                                 <td>{{ $role->display_name }}</td>
                                 <td>{{ $role->description }}</td>
                                 <td>
-                                    @forelse (($role->permissions ?? []) as $permission)
-                                        <span class="badge bg-secondary mb-1">{{ $permissions[$permission] ?? $permission }}</span>
-                                    @empty
+                                    @php($rolePermissions = $role->permissions ?? [])
+                                    @php($hasAnyPermission = false)
+                                    @foreach ($permissions as $moduleKey => $module)
+                                        @php($enabledActions = array_filter($module['actions'], fn ($label, $actionKey) => in_array($moduleKey . '.' . $actionKey, $rolePermissions, true), ARRAY_FILTER_USE_BOTH))
+                                        @if($enabledActions)
+                                            @php($hasAnyPermission = true)
+                                            <div class="mb-1">
+                                                <span class="fw-semibold">{{ $module['label'] }}:</span>
+                                                @foreach($enabledActions as $actionLabel)
+                                                    <span class="badge bg-secondary">{{ $actionLabel }}</span>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    @endforeach
+
+                                    @unless($hasAnyPermission)
                                         <span class="text-muted">Belum ada akses</span>
-                                    @endforelse
+                                    @endunless
                                 </td>
                                 <td>
                                     <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-warning btn-sm">Edit</a>

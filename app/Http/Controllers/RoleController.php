@@ -7,6 +7,19 @@ use App\Models\Role;
 
 class RoleController extends Controller
 {
+    private function permissionKeys(): array
+    {
+        $keys = [];
+
+        foreach (config('permissions') as $moduleKey => $module) {
+            foreach (array_keys($module['actions']) as $actionKey) {
+                $keys[] = $moduleKey . '.' . $actionKey;
+            }
+        }
+
+        return $keys;
+    }
+
     public function index()
     {
         // Mengambil semua data role menggunakan Eloquent Model
@@ -30,7 +43,7 @@ class RoleController extends Controller
             'display_name' => 'required',
             'description' => 'nullable|string',
             'permissions' => 'nullable|array',
-            'permissions.*' => 'string|in:' . implode(',', array_keys(config('permissions'))),
+            'permissions.*' => 'string|in:' . implode(',', $this->permissionKeys()),
         ]);
 
         $data['permissions'] = $data['permissions'] ?? [];
@@ -55,7 +68,7 @@ class RoleController extends Controller
             'display_name' => 'required',
             'description' => 'nullable|string',
             'permissions' => 'nullable|array',
-            'permissions.*' => 'string|in:' . implode(',', array_keys(config('permissions'))),
+            'permissions.*' => 'string|in:' . implode(',', $this->permissionKeys()),
         ]);
 
         $role = Role::findOrFail($id);

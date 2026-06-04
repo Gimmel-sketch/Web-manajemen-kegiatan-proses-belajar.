@@ -16,7 +16,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $allPermissions = array_keys(config('permissions'));
+        $allPermissions = [];
+
+        foreach (config('permissions') as $moduleKey => $module) {
+            foreach (array_keys($module['actions']) as $actionKey) {
+                $allPermissions[] = $moduleKey . '.' . $actionKey;
+            }
+        }
 
         $adminRole = Role::updateOrCreate(
             ['name' => 'admin'],
