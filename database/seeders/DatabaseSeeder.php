@@ -16,19 +16,33 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $allPermissions = array_keys(config('permissions'));
+
         $adminRole = Role::updateOrCreate(
             ['name' => 'admin'],
-            ['display_name' => 'Dosen', 'description' => 'Akses penuh ke semua fitur']
+            [
+                'display_name' => 'Dosen',
+                'description' => 'Akses penuh ke semua fitur',
+                'permissions' => $allPermissions,
+            ]
         );
 
         Role::updateOrCreate(
             ['name' => 'editor'],
-            ['display_name' => 'Staff Kampus', 'description' => 'Akses pengelolaan semua halaman']
+            [
+                'display_name' => 'Staff Kampus',
+                'description' => 'Akses pengelolaan semua halaman',
+                'permissions' => $allPermissions,
+            ]
         );
 
         Role::updateOrCreate(
             ['name' => 'user'],
-            ['display_name' => 'Mahasiswa', 'description' => 'Akses pengguna umum']
+            [
+                'display_name' => 'Mahasiswa',
+                'description' => 'Akses pengguna umum',
+                'permissions' => [],
+            ]
         );
 
         User::updateOrCreate(

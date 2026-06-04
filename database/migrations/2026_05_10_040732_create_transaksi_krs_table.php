@@ -15,7 +15,6 @@ return new class extends Migration
         $table->string('kode_mk');
         $table->integer('semester_tempuh');
         $table->string('tahun_akademik');
-        $table->string('nilai_akhir')->nullable();
         $table->timestamps();
 
         // Relasi (Foreign Key)

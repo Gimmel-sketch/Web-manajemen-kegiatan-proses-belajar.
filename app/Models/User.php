@@ -42,4 +42,13 @@ class User extends Authenticatable
 
         return $this->role !== null && in_array($this->role->name, $roles, true);
     }
+
+    public function hasPermission(string $permission): bool
+    {
+        if ($this->hasRole('admin')) {
+            return true;
+        }
+
+        return $this->role !== null && $this->role->hasPermission($permission);
+    }
 }

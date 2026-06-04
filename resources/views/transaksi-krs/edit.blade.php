@@ -37,10 +37,6 @@
                     <label class="form-label" for="tahun_akademik">Tahun Akademik</label>
                     <input class="form-control" id="tahun_akademik" name="tahun_akademik" value="{{ old('tahun_akademik', $transaksiKrs->tahun_akademik) }}" required>
                 </div>
-                <div class="col-md-2">
-                    <label class="form-label" for="nilai_akhir">Nilai Akhir</label>
-                    <input class="form-control" id="nilai_akhir" name="nilai_akhir" value="{{ old('nilai_akhir', $transaksiKrs->nilai_akhir) }}">
-                </div>
             </div>
             <div class="d-flex justify-content-end gap-2 mt-4">
                 <a class="btn btn-outline-secondary" href="{{ route('transaksi-krs.index') }}">Batal</a>

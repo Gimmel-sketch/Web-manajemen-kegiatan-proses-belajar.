@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('display_name');
             $table->text('description')->nullable();
+            $table->json('permissions')->nullable();
             $table->timestamps();
         });
     }

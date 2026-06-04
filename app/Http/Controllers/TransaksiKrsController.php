@@ -58,7 +58,6 @@ class TransaksiKrsController extends Controller
             'kode_mk' => ['required', 'exists:mata_kuliah,kode_mk'],
             'semester_tempuh' => ['required', 'integer', 'min:1'],
             'tahun_akademik' => ['required', 'string', 'max:255'],
-            'nilai_akhir' => ['nullable', 'string', 'max:10'],
         ];
     }
 

@@ -10,24 +10,32 @@ class RoleController extends Controller
     public function index()
     {
         // Mengambil semua data role menggunakan Eloquent Model
-        $roles = Role::all();
+        $roles = Role::orderBy('display_name')->get();
+        $permissions = config('permissions');
         
-        return view('roles', compact('roles'));
+        return view('roles', compact('roles', 'permissions'));
     }
 
     public function create()
     {
-        return view('roles-create');
+        $permissions = config('permissions');
+
+        return view('roles-create', compact('permissions'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required|unique:roles,name',
             'display_name' => 'required',
+            'description' => 'nullable|string',
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'string|in:' . implode(',', array_keys(config('permissions'))),
         ]);
 
-        Role::create($request->all());
+        $data['permissions'] = $data['permissions'] ?? [];
+
+        Role::create($data);
 
         return redirect()->route('roles.index')->with('success', 'Role berhasil ditambahkan');
     }
@@ -35,18 +43,24 @@ class RoleController extends Controller
     public function edit($id)
     {
         $role = Role::findOrFail($id);
-        return view('roles-edit', compact('role'));
+        $permissions = config('permissions');
+
+        return view('roles-edit', compact('role', 'permissions'));
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required|unique:roles,name,' . $id,
             'display_name' => 'required',
+            'description' => 'nullable|string',
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'string|in:' . implode(',', array_keys(config('permissions'))),
         ]);
 
         $role = Role::findOrFail($id);
-        $role->update($request->all());
+        $data['permissions'] = $data['permissions'] ?? [];
+        $role->update($data);
 
         return redirect()->route('roles.index')->with('success', 'Role berhasil diperbarui');
     }

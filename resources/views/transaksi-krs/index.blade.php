@@ -18,7 +18,6 @@
                     <th>Mata Kuliah</th>
                     <th>Semester Tempuh</th>
                     <th>Tahun Akademik</th>
-                    <th>Nilai</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -30,7 +29,6 @@
                         <td>{{ $item->mataKuliah?->nama_mk }}<br><small class="text-muted">{{ $item->kode_mk }}</small></td>
                         <td>{{ $item->semester_tempuh }}</td>
                         <td>{{ $item->tahun_akademik }}</td>
-                        <td>{{ $item->nilai_akhir ?? '-' }}</td>
                         <td>
                             <a class="btn btn-warning btn-sm" href="{{ route('transaksi-krs.edit', $item) }}">Edit</a>
                             <form class="d-inline" action="{{ route('transaksi-krs.destroy', $item) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
@@ -41,7 +39,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="text-center text-muted py-4">Belum ada data KRS.</td></tr>
+                    <tr><td colspan="6" class="text-center text-muted py-4">Belum ada data KRS.</td></tr>
                 @endforelse
             </tbody>
         </table>

@@ -62,7 +62,7 @@ Route::middleware('auth')->group(function () {
         ]);
     })->name('dashboard');
 
-    Route::middleware('role:admin,editor')->group(function () {
+    Route::middleware(['role:admin,editor', 'permission:manage_roles'])->group(function () {
         Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
         Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
         Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
@@ -71,38 +71,43 @@ Route::middleware('auth')->group(function () {
         Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
     });
 
-    Route::get('Create-mahasiswa', [MahasiswaController::class, 'create'])
-        ->name('Create-mahasiswa');
+    Route::middleware('permission:manage_mahasiswa')->group(function () {
+        Route::get('Create-mahasiswa', [MahasiswaController::class, 'create'])
+            ->name('Create-mahasiswa');
 
-    Route::post('simpan-mahasiswa', [MahasiswaController::class, 'store'])
-        ->name('simpan-mahasiswa');
+        Route::post('simpan-mahasiswa', [MahasiswaController::class, 'store'])
+            ->name('simpan-mahasiswa');
 
-    Route::get('Data-mahasiswa', [MahasiswaController::class, 'index'])
-        ->name('Data-mahasiswa');
+        Route::get('Data-mahasiswa', [MahasiswaController::class, 'index'])
+            ->name('Data-mahasiswa');
 
-    Route::get('edit-mahasiswa/{id}', [MahasiswaController::class, 'edit'])
-        ->name('edit-mahasiswa');
+        Route::get('edit-mahasiswa/{id}', [MahasiswaController::class, 'edit'])
+            ->name('edit-mahasiswa');
 
-    Route::put('edit-mahasiswa/{id}', [MahasiswaController::class, 'update'])
-        ->name('update-mahasiswa');
+        Route::put('edit-mahasiswa/{id}', [MahasiswaController::class, 'update'])
+            ->name('update-mahasiswa');
 
-    Route::delete('hapus-mahasiswa/{id}', [MahasiswaController::class, 'destroy'])
-        ->name('hapus-mahasiswa');
+        Route::delete('hapus-mahasiswa/{id}', [MahasiswaController::class, 'destroy'])
+            ->name('hapus-mahasiswa');
+    });
 
-    Route::resource('buku', BukuController::class)->except(['show']);
-    Route::resource('dosen', DosenController::class)->except(['show']);
-    Route::resource('ruangan', RuanganController::class)->except(['show']);
-    Route::resource('mata-kuliah', MataKuliahController::class)->except(['show']);
-    Route::resource('transaksi-krs', TransaksiKrsController::class)->except(['show']);
+    Route::resource('buku', BukuController::class)->except(['show'])->middleware('permission:manage_buku');
+    Route::resource('dosen', DosenController::class)->except(['show'])->middleware('permission:manage_dosen');
+    Route::resource('ruangan', RuanganController::class)->except(['show'])->middleware('permission:manage_ruangan');
+    Route::resource('mata-kuliah', MataKuliahController::class)->except(['show'])->middleware('permission:manage_mata_kuliah');
+    Route::resource('transaksi-krs', TransaksiKrsController::class)->except(['show'])->middleware('permission:manage_krs');
     Route::resource('jadwal-perkuliahan', TransaksiJadwalPerkuliahanController::class)
         ->parameters(['jadwal-perkuliahan' => 'jadwalPerkuliahan'])
-        ->except(['show']);
+        ->except(['show'])
+        ->middleware('permission:manage_jadwal_perkuliahan');
     Route::resource('presensi-perkuliahan', TransaksiPresensiPerkuliahanController::class)
         ->parameters(['presensi-perkuliahan' => 'presensiPerkuliahan'])
-        ->except(['show']);
+        ->except(['show'])
+        ->middleware('permission:manage_presensi_perkuliahan');
     Route::resource('nilai-perkuliahan', TransaksiNilaiPerkuliahanController::class)
         ->parameters(['nilai-perkuliahan' => 'nilaiPerkuliahan'])
-        ->except(['show']);
-    Route::resource('pembayaran-ukt', TransaksiPembayaranUktController::class)->except(['show']);
-    Route::resource('peminjaman-buku', TransaksiPeminjamanBukuController::class)->except(['show']);
+        ->except(['show'])
+        ->middleware('permission:manage_nilai_perkuliahan');
+    Route::resource('pembayaran-ukt', TransaksiPembayaranUktController::class)->except(['show'])->middleware('permission:manage_pembayaran_ukt');
+    Route::resource('peminjaman-buku', TransaksiPeminjamanBukuController::class)->except(['show'])->middleware('permission:manage_peminjaman_buku');
 });

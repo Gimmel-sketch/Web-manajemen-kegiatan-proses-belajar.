@@ -87,18 +87,18 @@
 <body class="bg-light">
     @php
         $menuItems = [
-            ['label' => 'Dashboard', 'route' => 'dashboard', 'patterns' => ['dashboard']],
-            ['label' => 'Data Mahasiswa', 'route' => 'Data-mahasiswa', 'patterns' => ['Data-mahasiswa', 'Create-mahasiswa', 'edit-mahasiswa']],
-            ['label' => 'Mata Kuliah', 'route' => 'mata-kuliah.index', 'patterns' => ['mata-kuliah.*']],
-            ['label' => 'Dosen', 'route' => 'dosen.index', 'patterns' => ['dosen.*']],
-            ['label' => 'Ruangan', 'route' => 'ruangan.index', 'patterns' => ['ruangan.*']],
-            ['label' => 'Buku', 'route' => 'buku.index', 'patterns' => ['buku.*']],
-            ['label' => 'KRS', 'route' => 'transaksi-krs.index', 'patterns' => ['transaksi-krs.*']],
-            ['label' => 'Jadwal', 'route' => 'jadwal-perkuliahan.index', 'patterns' => ['jadwal-perkuliahan.*']],
-            ['label' => 'Presensi', 'route' => 'presensi-perkuliahan.index', 'patterns' => ['presensi-perkuliahan.*']],
-            ['label' => 'Nilai', 'route' => 'nilai-perkuliahan.index', 'patterns' => ['nilai-perkuliahan.*']],
-            ['label' => 'UKT', 'route' => 'pembayaran-ukt.index', 'patterns' => ['pembayaran-ukt.*']],
-            ['label' => 'Peminjaman', 'route' => 'peminjaman-buku.index', 'patterns' => ['peminjaman-buku.*']],
+            ['label' => 'Dashboard', 'route' => 'dashboard', 'patterns' => ['dashboard'], 'permission' => null],
+            ['label' => 'Data Mahasiswa', 'route' => 'Data-mahasiswa', 'patterns' => ['Data-mahasiswa', 'Create-mahasiswa', 'edit-mahasiswa'], 'permission' => 'manage_mahasiswa'],
+            ['label' => 'Mata Kuliah', 'route' => 'mata-kuliah.index', 'patterns' => ['mata-kuliah.*'], 'permission' => 'manage_mata_kuliah'],
+            ['label' => 'Dosen', 'route' => 'dosen.index', 'patterns' => ['dosen.*'], 'permission' => 'manage_dosen'],
+            ['label' => 'Ruangan', 'route' => 'ruangan.index', 'patterns' => ['ruangan.*'], 'permission' => 'manage_ruangan'],
+            ['label' => 'Buku', 'route' => 'buku.index', 'patterns' => ['buku.*'], 'permission' => 'manage_buku'],
+            ['label' => 'KRS', 'route' => 'transaksi-krs.index', 'patterns' => ['transaksi-krs.*'], 'permission' => 'manage_krs'],
+            ['label' => 'Jadwal', 'route' => 'jadwal-perkuliahan.index', 'patterns' => ['jadwal-perkuliahan.*'], 'permission' => 'manage_jadwal_perkuliahan'],
+            ['label' => 'Presensi', 'route' => 'presensi-perkuliahan.index', 'patterns' => ['presensi-perkuliahan.*'], 'permission' => 'manage_presensi_perkuliahan'],
+            ['label' => 'Nilai', 'route' => 'nilai-perkuliahan.index', 'patterns' => ['nilai-perkuliahan.*'], 'permission' => 'manage_nilai_perkuliahan'],
+            ['label' => 'UKT', 'route' => 'pembayaran-ukt.index', 'patterns' => ['pembayaran-ukt.*'], 'permission' => 'manage_pembayaran_ukt'],
+            ['label' => 'Peminjaman', 'route' => 'peminjaman-buku.index', 'patterns' => ['peminjaman-buku.*'], 'permission' => 'manage_peminjaman_buku'],
         ];
     @endphp
 
@@ -115,12 +115,14 @@
                 <div class="collapse d-lg-block" id="sidebarMenu">
                     <nav class="nav flex-column gap-1 p-3">
                         @foreach($menuItems as $menuItem)
-                            <a class="nav-link {{ request()->routeIs(...$menuItem['patterns']) ? 'active' : '' }}" href="{{ route($menuItem['route']) }}">
-                                {{ $menuItem['label'] }}
-                            </a>
+                            @if($menuItem['permission'] === null || auth()->user()->hasPermission($menuItem['permission']))
+                                <a class="nav-link {{ request()->routeIs(...$menuItem['patterns']) ? 'active' : '' }}" href="{{ route($menuItem['route']) }}">
+                                    {{ $menuItem['label'] }}
+                                </a>
+                            @endif
                         @endforeach
 
-                        @if(auth()->user()->hasRole(['admin', 'editor']))
+                        @if(auth()->user()->hasRole(['admin', 'editor']) && auth()->user()->hasPermission('manage_roles'))
                             <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}" href="{{ route('roles.index') }}">
                                 Roles
                             </a>

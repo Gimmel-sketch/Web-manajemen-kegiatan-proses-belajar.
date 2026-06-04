@@ -8,7 +8,7 @@ class TransaksiKrs extends Model
 {
     protected $table = 'transaksi_krs';
 
-    protected $fillable = ['nim', 'kode_mk', 'semester_tempuh', 'tahun_akademik', 'nilai_akhir'];
+    protected $fillable = ['nim', 'kode_mk', 'semester_tempuh', 'tahun_akademik'];
 
     public function mahasiswa()
     {
