@@ -18,6 +18,7 @@
                     <th>Nama</th>
                     <th>Gelar</th>
                     <th>Spesialisasi</th>
+                    <th>Mata Kuliah</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -30,6 +31,12 @@
                         <td>{{ $item->gelar }}</td>
                         <td>{{ $item->spesialisasi }}</td>
                         <td>
+                            {{ $item->mataKuliah?->nama_mk ?? '-' }}
+                            @if($item->kode_mk)
+                                <br><small class="text-muted">{{ $item->kode_mk }}</small>
+                            @endif
+                        </td>
+                        <td>
                             <a class="btn btn-warning btn-sm" href="{{ route('dosen.edit', $item) }}">Edit</a>
                             <form class="d-inline" action="{{ route('dosen.destroy', $item) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
                                 @csrf
@@ -39,7 +46,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="text-center text-muted py-4">Belum ada data dosen.</td></tr>
+                    <tr><td colspan="7" class="text-center text-muted py-4">Belum ada data dosen.</td></tr>
                 @endforelse
             </tbody>
         </table>

@@ -8,7 +8,7 @@ class TransaksiKrs extends Model
 {
     protected $table = 'transaksi_krs';
 
-    protected $fillable = ['nim', 'kode_mk', 'semester_tempuh', 'tahun_akademik'];
+    protected $fillable = ['nim', 'kode_mk', 'nidn', 'semester_tempuh', 'tahun_akademik'];
 
     public function mahasiswa()
     {
@@ -18,6 +18,11 @@ class TransaksiKrs extends Model
     public function mataKuliah()
     {
         return $this->belongsTo(MataKuliah::class, 'kode_mk', 'kode_mk');
+    }
+
+    public function dosen()
+    {
+        return $this->belongsTo(Dosen::class, 'nidn', 'nidn');
     }
 
     public function nilaiPerkuliahan()

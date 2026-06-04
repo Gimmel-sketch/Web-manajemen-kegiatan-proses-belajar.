@@ -20,6 +20,11 @@ class MataKuliah extends Model
         return $this->hasMany(TransaksiKrs::class, 'kode_mk', 'kode_mk');
     }
 
+    public function dosen()
+    {
+        return $this->hasMany(Dosen::class, 'kode_mk', 'kode_mk');
+    }
+
     public function jadwalPerkuliahan()
     {
         return $this->hasMany(TransaksiJadwalPerkuliahan::class, 'kode_mk', 'kode_mk');

@@ -16,7 +16,10 @@ return new class extends Migration
             $table->string('nama');
             $table->string('gelar');
             $table->string('spesialisasi');
+            $table->string('kode_mk')->nullable();
             $table->timestamps();
+
+            $table->foreign('kode_mk')->references('kode_mk')->on('mata_kuliah')->nullOnDelete();
         });
     }
 
