@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label" for="kontak">Kontak</label>
-                    <input class="form-control" id="kontak" name="kontak" type="tel" value="{{ old('kontak') }}" placeholder="+62...">
+                    <input class="form-control" id="kontak" name="kontak" type="tel" value="{{ old('kontak') }}" placeholder="email atau nomor telepon">
                 </div>
                 <div class="col-md-4">
                     <label class="form-label" for="status">Status</label>
