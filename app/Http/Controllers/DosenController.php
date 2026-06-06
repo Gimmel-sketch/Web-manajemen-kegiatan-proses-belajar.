@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dosen;
-use App\Models\MataKuliah;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -11,13 +10,13 @@ class DosenController extends Controller
 {
     public function index()
     {
-        $dosen = Dosen::with('mataKuliah')->orderBy('nama')->get();
+        $dosen = Dosen::orderBy('nama')->get();
         return view('dosen.index', compact('dosen'));
     }
 
     public function create()
     {
-        return view('dosen.create', $this->formData());
+        return view('dosen.create');
     }
 
     public function store(Request $request)
@@ -26,8 +25,8 @@ class DosenController extends Controller
             'nidn' => ['required', 'string', 'max:20', 'unique:dosen,nidn'],
             'nama' => ['required', 'string', 'max:255'],
             'gelar' => ['required', 'string', 'max:255'],
-            'spesialisasi' => ['required', 'string', 'max:255'],
-            'kode_mk' => ['required', 'exists:mata_kuliah,kode_mk'],
+            'kontak' => ['nullable', 'string', 'max:20'],
+            'status' => ['required', 'in:aktif,non-aktif'],
         ]);
 
         Dosen::create($data);
@@ -37,7 +36,7 @@ class DosenController extends Controller
 
     public function edit(Dosen $dosen)
     {
-        return view('dosen.edit', array_merge($this->formData(), compact('dosen')));
+        return view('dosen.edit', compact('dosen'));
     }
 
     public function update(Request $request, Dosen $dosen)
@@ -46,8 +45,8 @@ class DosenController extends Controller
             'nidn' => ['required', 'string', 'max:20', Rule::unique('dosen', 'nidn')->ignore($dosen->nidn, 'nidn')],
             'nama' => ['required', 'string', 'max:255'],
             'gelar' => ['required', 'string', 'max:255'],
-            'spesialisasi' => ['required', 'string', 'max:255'],
-            'kode_mk' => ['required', 'exists:mata_kuliah,kode_mk'],
+            'kontak' => ['nullable', 'string', 'max:20'],
+            'status' => ['required', 'in:aktif,non-aktif'],
         ]);
 
         $dosen->update($data);
@@ -60,12 +59,5 @@ class DosenController extends Controller
         $dosen->delete();
 
         return redirect()->route('dosen.index')->with('success', 'Data dosen berhasil dihapus.');
-    }
-
-    private function formData(): array
-    {
-        return [
-            'mataKuliah' => MataKuliah::orderBy('nama_mk')->get(),
-        ];
     }
 }

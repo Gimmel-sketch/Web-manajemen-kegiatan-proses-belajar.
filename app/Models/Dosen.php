@@ -11,12 +11,7 @@ class Dosen extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['nidn', 'nama', 'gelar', 'spesialisasi', 'kode_mk'];
-
-    public function mataKuliah()
-    {
-        return $this->belongsTo(MataKuliah::class, 'kode_mk', 'kode_mk');
-    }
+    protected $fillable = ['nidn', 'nama', 'gelar', 'kontak', 'status'];
 
     public function jadwalPerkuliahan()
     {

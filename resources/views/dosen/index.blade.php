@@ -17,8 +17,8 @@
                     <th>NIDN</th>
                     <th>Nama</th>
                     <th>Gelar</th>
-                    <th>Spesialisasi</th>
-                    <th>Mata Kuliah</th>
+                    <th>Kontak</th>
+                    <th>Status</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -29,11 +29,12 @@
                         <td>{{ $item->nidn }}</td>
                         <td>{{ $item->nama }}</td>
                         <td>{{ $item->gelar }}</td>
-                        <td>{{ $item->spesialisasi }}</td>
+                        <td>{{ $item->kontak ?? '-' }}</td>
                         <td>
-                            {{ $item->mataKuliah?->nama_mk ?? '-' }}
-                            @if($item->kode_mk)
-                                <br><small class="text-muted">{{ $item->kode_mk }}</small>
+                            @if($item->status === 'aktif')
+                                <span class="badge bg-success">Aktif</span>
+                            @else
+                                <span class="badge bg-danger">Non-Aktif</span>
                             @endif
                         </td>
                         <td>

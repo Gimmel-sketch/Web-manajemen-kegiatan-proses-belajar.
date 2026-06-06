@@ -26,18 +26,14 @@
                     <input class="form-control" id="gelar" name="gelar" value="{{ old('gelar', $dosen->gelar) }}" required>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label" for="spesialisasi">Spesialisasi</label>
-                    <input class="form-control" id="spesialisasi" name="spesialisasi" value="{{ old('spesialisasi', $dosen->spesialisasi) }}" required>
+                    <label class="form-label" for="kontak">Kontak</label>
+                    <input class="form-control" id="kontak" name="kontak" type="tel" value="{{ old('kontak', $dosen->kontak) }}" placeholder="+62...">
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label" for="kode_mk">Mata Kuliah yang Diajar</label>
-                    <select class="form-select" id="kode_mk" name="kode_mk" required>
-                        <option value="">Pilih mata kuliah</option>
-                        @foreach($mataKuliah as $item)
-                            <option value="{{ $item->kode_mk }}" @selected(old('kode_mk', $dosen->kode_mk) == $item->kode_mk)>
-                                {{ $item->nama_mk }} - {{ $item->kode_mk }}
-                            </option>
-                        @endforeach
+                    <label class="form-label" for="status">Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="aktif" @selected(old('status', $dosen->status) === 'aktif')>Aktif</option>
+                        <option value="non-aktif" @selected(old('status', $dosen->status) === 'non-aktif')>Non-Aktif</option>
                     </select>
                 </div>
             </div>
