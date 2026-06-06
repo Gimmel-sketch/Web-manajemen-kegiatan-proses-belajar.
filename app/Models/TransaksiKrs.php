@@ -8,7 +8,23 @@ class TransaksiKrs extends Model
 {
     protected $table = 'transaksi_krs';
 
-    protected $fillable = ['nim', 'kode_mk', 'nidn', 'semester_tempuh', 'tahun_akademik'];
+    protected $fillable = [
+        'nim',
+        'kode_mk',
+        'nidn',
+        'semester_tempuh',
+        'tahun_akademik',
+        'status_verifikasi',
+        'verified_at',
+        'verified_by',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'verified_at' => 'datetime',
+        ];
+    }
 
     public function mahasiswa()
     {
@@ -23,6 +39,11 @@ class TransaksiKrs extends Model
     public function dosen()
     {
         return $this->belongsTo(Dosen::class, 'nidn', 'nidn');
+    }
+
+    public function verifier()
+    {
+        return $this->belongsTo(User::class, 'verified_by');
     }
 
     public function nilaiPerkuliahan()

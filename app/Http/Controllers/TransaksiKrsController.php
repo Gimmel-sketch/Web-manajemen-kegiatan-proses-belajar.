@@ -13,7 +13,7 @@ class TransaksiKrsController extends Controller
 {
     public function index()
     {
-        $transaksiKrs = TransaksiKrs::with(['mahasiswa', 'mataKuliah', 'dosen'])->latest()->get();
+        $transaksiKrs = TransaksiKrs::with(['mahasiswa', 'mataKuliah', 'dosen', 'verifier'])->latest()->get();
         return view('transaksi-krs.index', compact('transaksiKrs'));
     }
 
@@ -25,6 +25,7 @@ class TransaksiKrsController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate($this->rules());
+        $data['status_verifikasi'] = 'menunggu';
 
         TransaksiKrs::create($data);
 
@@ -41,9 +42,35 @@ class TransaksiKrsController extends Controller
     public function update(Request $request, TransaksiKrs $transaksiKr)
     {
         $data = $request->validate($this->rules());
+        $data['status_verifikasi'] = 'menunggu';
+        $data['verified_at'] = null;
+        $data['verified_by'] = null;
+
         $transaksiKr->update($data);
 
         return redirect()->route('transaksi-krs.index')->with('success', 'Data KRS berhasil diperbarui.');
+    }
+
+    public function verify(TransaksiKrs $transaksiKr)
+    {
+        $transaksiKr->update([
+            'status_verifikasi' => 'terverifikasi',
+            'verified_at' => now(),
+            'verified_by' => auth()->id(),
+        ]);
+
+        return redirect()->route('transaksi-krs.index')->with('success', 'Data KRS berhasil diverifikasi.');
+    }
+
+    public function unverify(TransaksiKrs $transaksiKr)
+    {
+        $transaksiKr->update([
+            'status_verifikasi' => 'menunggu',
+            'verified_at' => null,
+            'verified_by' => null,
+        ]);
+
+        return redirect()->route('transaksi-krs.index')->with('success', 'Verifikasi KRS berhasil dibatalkan.');
     }
 
     public function destroy(TransaksiKrs $transaksiKr)

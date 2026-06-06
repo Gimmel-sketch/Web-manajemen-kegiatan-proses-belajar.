@@ -122,6 +122,12 @@ Route::middleware('auth')->group(function () {
         ->middlewareFor(['create', 'store'], 'permission:krs.create')
         ->middlewareFor(['edit', 'update'], 'permission:krs.update')
         ->middlewareFor('destroy', 'permission:krs.delete');
+    Route::put('transaksi-krs/{transaksiKr}/verify', [TransaksiKrsController::class, 'verify'])
+        ->middleware(['role:admin', 'permission:krs.update'])
+        ->name('transaksi-krs.verify');
+    Route::put('transaksi-krs/{transaksiKr}/unverify', [TransaksiKrsController::class, 'unverify'])
+        ->middleware(['role:admin', 'permission:krs.update'])
+        ->name('transaksi-krs.unverify');
     Route::resource('jadwal-perkuliahan', TransaksiJadwalPerkuliahanController::class)
         ->parameters(['jadwal-perkuliahan' => 'jadwalPerkuliahan'])
         ->except(['show'])

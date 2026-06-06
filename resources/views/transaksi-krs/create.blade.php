@@ -56,6 +56,8 @@
                     <label class="form-label" for="nilai_akhir">Nilai Akhir</label>
                     <input class="form-control" id="nilai_akhir" name="nilai_akhir" value="{{ old('nilai_akhir') }}">
                 </div>
+
+
             </div>
             <div class="d-flex justify-content-end gap-2 mt-4">
                 <a class="btn btn-outline-secondary" href="{{ route('transaksi-krs.index') }}">Batal</a>
@@ -80,14 +82,32 @@
             option.hidden = option.dataset.kodeMk !== selectedKodeMk;
         });
 
-        const selectedOption = dosenSelect.options[dosenSelect.selectedIndex];
+        // Reset pilihan dosen jika sekarang tidak sesuai dengan kode_mk terpilih
+        const selectedOption = Array.from(dosenSelect.options).find(
+            (opt) => opt.value && opt.value === dosenSelect.value
+        );
 
-        if (selectedOption && selectedOption.value && selectedOption.hidden) {
+        if (selectedOption && selectedOption.hidden) {
             dosenSelect.value = '';
         }
     }
 
     mataKuliahSelect.addEventListener('change', syncDosenOptions);
     syncDosenOptions();
+
+    // Toggle container pengingat input nilai akhir
+    const btnInputNilai = document.getElementById('btn-input-nilai');
+    const nilaiAkhirContainer = document.getElementById('nilai-akhir-container');
+
+    if (btnInputNilai && nilaiAkhirContainer) {
+        btnInputNilai.addEventListener('click', () => {
+            nilaiAkhirContainer.style.display = (nilaiAkhirContainer.style.display === 'none') ? 'block' : 'none';
+
+            // fokus ke input nilai akhir
+            const inputNilai = document.getElementById('nilai_akhir');
+            if (inputNilai) inputNilai.focus();
+        });
+    }
 </script>
 @endsection
+

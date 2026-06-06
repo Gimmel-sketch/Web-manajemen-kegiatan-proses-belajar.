@@ -75,9 +75,12 @@
             option.hidden = option.dataset.kodeMk !== selectedKodeMk;
         });
 
-        const selectedOption = dosenSelect.options[dosenSelect.selectedIndex];
+        // Reset pilihan dosen jika sekarang tidak sesuai dengan kode_mk terpilih
+        const selectedOption = Array.from(dosenSelect.options).find(
+            (opt) => opt.value && opt.value === dosenSelect.value
+        );
 
-        if (selectedOption && selectedOption.value && selectedOption.hidden) {
+        if (selectedOption && selectedOption.hidden) {
             dosenSelect.value = '';
         }
     }

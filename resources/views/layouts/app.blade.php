@@ -87,19 +87,39 @@
 <body class="bg-light">
     @php
         $menuItems = [
-            ['label' => 'Dashboard', 'route' => 'dashboard', 'patterns' => ['dashboard'], 'permission' => null],
-            ['label' => 'Data Mahasiswa', 'route' => 'Data-mahasiswa', 'patterns' => ['Data-mahasiswa', 'Create-mahasiswa', 'edit-mahasiswa'], 'permission' => 'mahasiswa.view'],
-            ['label' => 'Mata Kuliah', 'route' => 'mata-kuliah.index', 'patterns' => ['mata-kuliah.*'], 'permission' => 'mata_kuliah.view'],
-            ['label' => 'Dosen', 'route' => 'dosen.index', 'patterns' => ['dosen.*'], 'permission' => 'dosen.view'],
-            ['label' => 'Ruangan', 'route' => 'ruangan.index', 'patterns' => ['ruangan.*'], 'permission' => 'ruangan.view'],
-            ['label' => 'Buku', 'route' => 'buku.index', 'patterns' => ['buku.*'], 'permission' => 'buku.view'],
-            ['label' => 'KRS', 'route' => 'transaksi-krs.index', 'patterns' => ['transaksi-krs.*'], 'permission' => 'krs.view'],
-            ['label' => 'Jadwal', 'route' => 'jadwal-perkuliahan.index', 'patterns' => ['jadwal-perkuliahan.*'], 'permission' => 'jadwal_perkuliahan.view'],
-            ['label' => 'Presensi', 'route' => 'presensi-perkuliahan.index', 'patterns' => ['presensi-perkuliahan.*'], 'permission' => 'presensi_perkuliahan.view'],
-            ['label' => 'Nilai', 'route' => 'nilai-perkuliahan.index', 'patterns' => ['nilai-perkuliahan.*'], 'permission' => 'nilai_perkuliahan.view'],
-            ['label' => 'UKT', 'route' => 'pembayaran-ukt.index', 'patterns' => ['pembayaran-ukt.*'], 'permission' => 'pembayaran_ukt.view'],
-            ['label' => 'Peminjaman', 'route' => 'peminjaman-buku.index', 'patterns' => ['peminjaman-buku.*'], 'permission' => 'peminjaman_buku.view'],
+            ['label' => 'Dashboard', 'route' => 'dashboard', 'patterns' => ['dashboard'], 'permission' => null, 'group' => 'General'],
+
+            ['label' => 'Data Mahasiswa', 'route' => 'Data-mahasiswa', 'patterns' => ['Data-mahasiswa', 'Create-mahasiswa', 'edit-mahasiswa'], 'permission' => 'mahasiswa.view', 'group' => 'Akademik'],
+            ['label' => 'Dosen', 'route' => 'dosen.index', 'patterns' => ['dosen.*'], 'permission' => 'dosen.view', 'group' => 'Akademik'],
+            ['label' => 'Mata Kuliah', 'route' => 'mata-kuliah.index', 'patterns' => ['mata-kuliah.*'], 'permission' => 'mata_kuliah.view', 'group' => 'Akademik'],
+            ['label' => 'Ruangan', 'route' => 'ruangan.index', 'patterns' => ['ruangan.*'], 'permission' => 'ruangan.view', 'group' => 'Akademik'],
+            ['label' => 'Buku', 'route' => 'buku.index', 'patterns' => ['buku.*'], 'permission' => 'buku.view', 'group' => 'Akademik'],
+            ['label' => 'Peminjaman', 'route' => 'peminjaman-buku.index', 'patterns' => ['peminjaman-buku.*'], 'permission' => 'peminjaman_buku.view', 'group' => 'Akademik'],
+
+            ['label' => 'KRS', 'route' => 'transaksi-krs.index', 'patterns' => ['transaksi-krs.*'], 'permission' => 'krs.view', 'group' => 'Aktivitas Akademik'],
+            ['label' => 'Jadwal', 'route' => 'jadwal-perkuliahan.index', 'patterns' => ['jadwal-perkuliahan.*'], 'permission' => 'jadwal_perkuliahan.view', 'group' => 'Aktivitas Akademik'],
+            ['label' => 'Presensi', 'route' => 'presensi-perkuliahan.index', 'patterns' => ['presensi-perkuliahan.*'], 'permission' => 'presensi_perkuliahan.view', 'group' => 'Aktivitas Akademik'],
+            ['label' => 'Nilai', 'route' => 'nilai-perkuliahan.index', 'patterns' => ['nilai-perkuliahan.*'], 'permission' => 'nilai_perkuliahan.view', 'group' => 'Aktivitas Akademik'],
+
+            ['label' => 'UKT', 'route' => 'pembayaran-ukt.index', 'patterns' => ['pembayaran-ukt.*'], 'permission' => 'pembayaran_ukt.view', 'group' => 'Transaksi'],
         ];
+
+        $sidebarGroups = [
+            'General' => [
+                'items' => array_filter($menuItems, fn ($item) => $item['group'] === 'General'),
+            ],
+            'Akademik' => [
+                'items' => array_filter($menuItems, fn ($item) => $item['group'] === 'Akademik'),
+            ],
+            'Aktivitas Akademik' => [
+                'items' => array_filter($menuItems, fn ($item) => $item['group'] === 'Aktivitas Akademik'),
+            ],
+            'Transaksi' => [
+                'items' => array_filter($menuItems, fn ($item) => $item['group'] === 'Transaksi'),
+            ],
+        ];
+
+        $groupOrder = array_keys($sidebarGroups);
     @endphp
 
     <div class="app-shell @auth d-lg-flex @endauth">
@@ -114,15 +134,26 @@
 
                 <div class="collapse d-lg-block" id="sidebarMenu">
                     <nav class="nav flex-column gap-1 p-3">
-                        @foreach($menuItems as $menuItem)
-                            @if($menuItem['permission'] === null || auth()->user()->hasPermission($menuItem['permission']))
-                                <a class="nav-link {{ request()->routeIs(...$menuItem['patterns']) ? 'active' : '' }}" href="{{ route($menuItem['route']) }}">
-                                    {{ $menuItem['label'] }}
-                                </a>
+                        @foreach($groupOrder as $idx => $groupName)
+                            <div class="small text-secondary mt-1 mb-1">{{ $groupName }}</div>
+
+                            @foreach($sidebarGroups[$groupName]['items'] as $menuItem)
+                                @if($menuItem['permission'] === null || auth()->user()->hasPermission($menuItem['permission']))
+                                    <a class="nav-link {{ request()->routeIs(...$menuItem['patterns']) ? 'active' : '' }}" href="{{ route($menuItem['route']) }}">
+                                        {{ $menuItem['label'] }}
+                                    </a>
+                                @endif
+                            @endforeach
+
+                            @if($idx < count($groupOrder) - 1)
+                                <div class="border-top border-secondary my-2"></div>
                             @endif
                         @endforeach
 
+                        {{-- Sistem --}}
                         @if(auth()->user()->hasRole(['admin', 'editor']) && auth()->user()->hasPermission('roles.view'))
+                            <div class="border-top border-secondary my-2"></div>
+                            <div class="small text-secondary mt-1 mb-1">System</div>
                             <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}" href="{{ route('roles.index') }}">
                                 Roles
                             </a>

@@ -19,6 +19,7 @@
                     <th>Dosen</th>
                     <th>Semester Tempuh</th>
                     <th>Tahun Akademik</th>
+                    <th>Status</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -32,6 +33,34 @@
                         <td>{{ $item->semester_tempuh }}</td>
                         <td>{{ $item->tahun_akademik }}</td>
                         <td>
+                            @if($item->status_verifikasi === 'terverifikasi')
+                                <span class="badge text-bg-success">Terverifikasi</span>
+                                <div class="small text-muted mt-1">
+                                    {{ $item->verified_at?->format('d/m/Y H:i') }}
+                                    @if($item->verifier)
+                                        <br>oleh {{ $item->verifier->name }}
+                                    @endif
+                                </div>
+                            @else
+                                <span class="badge text-bg-warning">Menunggu</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if(auth()->user()->hasRole('admin'))
+                                @if($item->status_verifikasi === 'terverifikasi')
+                                    <form class="d-inline" action="{{ route('transaksi-krs.unverify', $item) }}" method="POST" onsubmit="return confirm('Batalkan verifikasi data KRS ini?')">
+                                        @csrf
+                                        @method('PUT')
+                                        <button class="btn btn-outline-secondary btn-sm" type="submit">Batalkan</button>
+                                    </form>
+                                @else
+                                    <form class="d-inline" action="{{ route('transaksi-krs.verify', $item) }}" method="POST" onsubmit="return confirm('Verifikasi data KRS ini?')">
+                                        @csrf
+                                        @method('PUT')
+                                        <button class="btn btn-success btn-sm" type="submit">Verifikasi</button>
+                                    </form>
+                                @endif
+                            @endif
                             <a class="btn btn-warning btn-sm" href="{{ route('transaksi-krs.edit', $item) }}">Edit</a>
                             <form class="d-inline" action="{{ route('transaksi-krs.destroy', $item) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
                                 @csrf
@@ -41,7 +70,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="text-center text-muted py-4">Belum ada data KRS.</td></tr>
+                    <tr><td colspan="8" class="text-center text-muted py-4">Belum ada data KRS.</td></tr>
                 @endforelse
             </tbody>
         </table>
