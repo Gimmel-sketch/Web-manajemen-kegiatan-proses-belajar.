@@ -29,20 +29,6 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label" for="nidn">Dosen</label>
-                    <select class="form-select" id="nidn" name="nidn" required>
-                        <option value="">Pilih dosen</option>
-                        @foreach($dosen as $item)
-                            <option value="{{ $item->nidn }}" data-kode-mk="{{ $item->kode_mk }}" @selected(old('nidn', $transaksiKrs->nidn) == $item->nidn)>
-                                {{ $item->nama }} - {{ $item->nidn }}
-                                @if($item->mataKuliah)
-                                    ({{ $item->mataKuliah->nama_mk }})
-                                @endif
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
                 <div class="col-md-2">
                     <label class="form-label" for="semester_tempuh">Semester</label>
                     <input class="form-control" type="number" min="1" id="semester_tempuh" name="semester_tempuh" value="{{ old('semester_tempuh', $transaksiKrs->semester_tempuh) }}" required>
@@ -60,32 +46,6 @@
     </div>
 </div>
 <script>
-    const mataKuliahSelect = document.getElementById('kode_mk');
-    const dosenSelect = document.getElementById('nidn');
-
-    function syncDosenOptions() {
-        const selectedKodeMk = mataKuliahSelect.value;
-
-        Array.from(dosenSelect.options).forEach((option) => {
-            if (!option.value) {
-                option.hidden = false;
-                return;
-            }
-
-            option.hidden = option.dataset.kodeMk !== selectedKodeMk;
-        });
-
-        // Reset pilihan dosen jika sekarang tidak sesuai dengan kode_mk terpilih
-        const selectedOption = Array.from(dosenSelect.options).find(
-            (opt) => opt.value && opt.value === dosenSelect.value
-        );
-
-        if (selectedOption && selectedOption.hidden) {
-            dosenSelect.value = '';
-        }
-    }
-
-    mataKuliahSelect.addEventListener('change', syncDosenOptions);
-    syncDosenOptions();
+    // Empty script - sync functionality removed
 </script>
 @endsection

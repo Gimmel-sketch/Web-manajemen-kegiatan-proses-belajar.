@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Dosen;
 use App\Models\Mahasiswa;
 use App\Models\MataKuliah;
 use App\Models\TransaksiKrs;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class TransaksiKrsController extends Controller
 {
     public function index()
     {
-        $transaksiKrs = TransaksiKrs::with(['mahasiswa', 'mataKuliah', 'dosen', 'verifier'])->latest()->get();
+        $transaksiKrs = TransaksiKrs::with(['mahasiswa', 'mataKuliah', 'verifier'])->latest()->get();
         return view('transaksi-krs.index', compact('transaksiKrs'));
     }
 
@@ -85,10 +83,6 @@ class TransaksiKrsController extends Controller
         return [
             'nim' => ['required', 'exists:mahasiswa,nim'],
             'kode_mk' => ['required', 'exists:mata_kuliah,kode_mk'],
-            'nidn' => [
-                'required',
-                Rule::exists('dosen', 'nidn')->where(fn ($query) => $query->where('kode_mk', request('kode_mk'))),
-            ],
             'semester_tempuh' => ['required', 'integer', 'min:1'],
             'tahun_akademik' => ['required', 'string', 'max:255'],
         ];
@@ -99,7 +93,6 @@ class TransaksiKrsController extends Controller
         return [
             'mahasiswa' => Mahasiswa::orderBy('nama')->get(),
             'mataKuliah' => MataKuliah::orderBy('nama_mk')->get(),
-            'dosen' => Dosen::with('mataKuliah')->orderBy('nama')->get(),
         ];
     }
 }

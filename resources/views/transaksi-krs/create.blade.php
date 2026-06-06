@@ -30,20 +30,6 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label" for="nidn">Dosen</label>
-                    <select class="form-select" id="nidn" name="nidn" required>
-                        <option value="">Pilih dosen</option>
-                        @foreach($dosen as $item)
-                            <option value="{{ $item->nidn }}" data-kode-mk="{{ $item->kode_mk }}" @selected(old('nidn') == $item->nidn)>
-                                {{ $item->nama }} - {{ $item->nidn }}
-                                @if($item->mataKuliah)
-                                    ({{ $item->mataKuliah->nama_mk }})
-                                @endif
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
                 <div class="col-md-2">
                     <label class="form-label" for="semester_tempuh">Semester</label>
                     <input class="form-control" type="number" min="1" id="semester_tempuh" name="semester_tempuh" value="{{ old('semester_tempuh', 1) }}" required>
@@ -51,10 +37,6 @@
                 <div class="col-md-2">
                     <label class="form-label" for="tahun_akademik">Tahun Akademik</label>
                     <input class="form-control" id="tahun_akademik" name="tahun_akademik" value="{{ old('tahun_akademik') }}" placeholder="2025/2026" required>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label" for="nilai_akhir">Nilai Akhir</label>
-                    <input class="form-control" id="nilai_akhir" name="nilai_akhir" value="{{ old('nilai_akhir') }}">
                 </div>
 
 
@@ -67,47 +49,6 @@
     </div>
 </div>
 <script>
-    const mataKuliahSelect = document.getElementById('kode_mk');
-    const dosenSelect = document.getElementById('nidn');
-
-    function syncDosenOptions() {
-        const selectedKodeMk = mataKuliahSelect.value;
-
-        Array.from(dosenSelect.options).forEach((option) => {
-            if (!option.value) {
-                option.hidden = false;
-                return;
-            }
-
-            option.hidden = option.dataset.kodeMk !== selectedKodeMk;
-        });
-
-        // Reset pilihan dosen jika sekarang tidak sesuai dengan kode_mk terpilih
-        const selectedOption = Array.from(dosenSelect.options).find(
-            (opt) => opt.value && opt.value === dosenSelect.value
-        );
-
-        if (selectedOption && selectedOption.hidden) {
-            dosenSelect.value = '';
-        }
-    }
-
-    mataKuliahSelect.addEventListener('change', syncDosenOptions);
-    syncDosenOptions();
-
-    // Toggle container pengingat input nilai akhir
-    const btnInputNilai = document.getElementById('btn-input-nilai');
-    const nilaiAkhirContainer = document.getElementById('nilai-akhir-container');
-
-    if (btnInputNilai && nilaiAkhirContainer) {
-        btnInputNilai.addEventListener('click', () => {
-            nilaiAkhirContainer.style.display = (nilaiAkhirContainer.style.display === 'none') ? 'block' : 'none';
-
-            // fokus ke input nilai akhir
-            const inputNilai = document.getElementById('nilai_akhir');
-            if (inputNilai) inputNilai.focus();
-        });
-    }
 </script>
 @endsection
 

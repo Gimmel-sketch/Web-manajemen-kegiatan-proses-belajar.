@@ -11,7 +11,6 @@ class TransaksiKrs extends Model
     protected $fillable = [
         'nim',
         'kode_mk',
-        'nidn',
         'semester_tempuh',
         'tahun_akademik',
         'status_verifikasi',
@@ -34,11 +33,6 @@ class TransaksiKrs extends Model
     public function mataKuliah()
     {
         return $this->belongsTo(MataKuliah::class, 'kode_mk', 'kode_mk');
-    }
-
-    public function dosen()
-    {
-        return $this->belongsTo(Dosen::class, 'nidn', 'nidn');
     }
 
     public function verifier()

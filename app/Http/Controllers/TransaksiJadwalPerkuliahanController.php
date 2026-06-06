@@ -12,7 +12,7 @@ class TransaksiJadwalPerkuliahanController extends Controller
 {
     public function index()
     {
-        $jadwalPerkuliahan = TransaksiJadwalPerkuliahan::with(['mataKuliah', 'dosen', 'ruangan', 'presensiPerkuliahan'])
+        $jadwalPerkuliahan = TransaksiJadwalPerkuliahan::with(['mataKuliah', 'dosen', 'ruangan'])
             ->orderBy('hari')
             ->orderBy('jam_mulai')
             ->get();
