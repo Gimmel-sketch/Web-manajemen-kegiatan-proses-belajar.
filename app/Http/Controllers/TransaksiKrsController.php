@@ -11,17 +11,20 @@ class TransaksiKrsController extends Controller
 {
     public function index()
     {
+        $this->authorizeAction('krs', 'view', 'Anda tidak memiliki akses untuk melihat data KRS.');
         $transaksiKrs = TransaksiKrs::with(['mahasiswa', 'mataKuliah', 'verifier'])->latest()->get();
         return view('transaksi-krs.index', compact('transaksiKrs'));
     }
 
     public function create()
     {
+        $this->authorizeAction('krs', 'create', 'Anda tidak memiliki akses untuk menambah data KRS.');
         return view('transaksi-krs.create', $this->formData());
     }
 
     public function store(Request $request)
     {
+        $this->authorizeAction('krs', 'create', 'Anda tidak memiliki akses untuk menambah data KRS.');
         $data = $request->validate($this->rules());
         $data['status_verifikasi'] = 'menunggu';
 
@@ -32,6 +35,7 @@ class TransaksiKrsController extends Controller
 
     public function edit(TransaksiKrs $transaksiKr)
     {
+        $this->authorizeAction('krs', 'update', 'Anda tidak memiliki akses untuk mengedit data KRS.');
         return view('transaksi-krs.edit', array_merge($this->formData(), [
             'transaksiKrs' => $transaksiKr,
         ]));
@@ -39,6 +43,7 @@ class TransaksiKrsController extends Controller
 
     public function update(Request $request, TransaksiKrs $transaksiKr)
     {
+        $this->authorizeAction('krs', 'update', 'Anda tidak memiliki akses untuk mengedit data KRS.');
         $data = $request->validate($this->rules());
         $data['status_verifikasi'] = 'menunggu';
         $data['verified_at'] = null;
@@ -51,6 +56,7 @@ class TransaksiKrsController extends Controller
 
     public function verify(TransaksiKrs $transaksiKr)
     {
+        $this->authorizeAction('krs', 'update', 'Anda tidak memiliki akses untuk memverifikasi KRS.');
         $transaksiKr->update([
             'status_verifikasi' => 'terverifikasi',
             'verified_at' => now(),

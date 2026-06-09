@@ -5,7 +5,9 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0">Peminjaman Buku</h1>
-    <a class="btn btn-primary" href="{{ route('peminjaman-buku.create') }}">Tambah Peminjaman</a>
+    @if(auth()->user()->hasPermission('peminjaman_buku.create'))
+        <a class="btn btn-primary" href="{{ route('peminjaman-buku.create') }}">Tambah Peminjaman</a>
+    @endif
 </div>
 
 <div class="card shadow-sm">
@@ -36,12 +38,16 @@
                         <td><span class="badge text-bg-secondary">{{ $item->status_pinjam }}</span></td>
                         <td>Rp {{ number_format($item->denda ?? 0, 0, ',', '.') }}</td>
                         <td>
-                            <a class="btn btn-warning btn-sm" href="{{ route('peminjaman-buku.edit', $item) }}">Edit</a>
-                            <form class="d-inline" action="{{ route('peminjaman-buku.destroy', $item) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-danger btn-sm" type="submit">Hapus</button>
-                            </form>
+                            @if(auth()->user()->hasPermission('peminjaman_buku.update'))
+                                <a class="btn btn-warning btn-sm" href="{{ route('peminjaman-buku.edit', $item) }}">Edit</a>
+                            @endif
+                            @if(auth()->user()->hasPermission('peminjaman_buku.delete'))
+                                <form class="d-inline" action="{{ route('peminjaman-buku.destroy', $item) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-danger btn-sm" type="submit">Hapus</button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @empty

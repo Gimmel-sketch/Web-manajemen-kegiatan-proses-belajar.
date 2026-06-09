@@ -9,12 +9,9 @@ class Role extends Model
 {
     protected $fillable = ['name', 'display_name', 'description', 'permissions'];
 
-    protected function casts(): array
-    {
-        return [
-            'permissions' => 'array',
-        ];
-    }
+    protected $casts = [
+        'permissions' => 'array',
+    ];
 
     public function hasPermission(string $permission): bool
     {

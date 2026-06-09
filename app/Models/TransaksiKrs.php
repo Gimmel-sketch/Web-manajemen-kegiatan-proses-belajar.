@@ -18,12 +18,9 @@ class TransaksiKrs extends Model
         'verified_by',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'verified_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'verified_at' => 'datetime',
+    ];
 
     public function mahasiswa()
     {

@@ -22,6 +22,7 @@ class RoleController extends Controller
 
     public function index()
     {
+        $this->authorizeAction('roles', 'view', 'Anda tidak memiliki akses untuk melihat data role dan hak akses.');
         // Mengambil semua data role menggunakan Eloquent Model
         $roles = Role::orderBy('display_name')->get();
         $permissions = config('permissions');
@@ -31,6 +32,7 @@ class RoleController extends Controller
 
     public function create()
     {
+        $this->authorizeAction('roles', 'create', 'Anda tidak memiliki akses untuk menambah role dan hak akses.');
         $permissions = config('permissions');
 
         return view('roles-create', compact('permissions'));
@@ -38,6 +40,7 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorizeAction('roles', 'create', 'Anda tidak memiliki akses untuk menambah role dan hak akses.');
         $data = $request->validate([
             'name' => 'required|unique:roles,name',
             'display_name' => 'required',
@@ -55,6 +58,7 @@ class RoleController extends Controller
 
     public function edit($id)
     {
+        $this->authorizeAction('roles', 'update', 'Anda tidak memiliki akses untuk mengedit role dan hak akses.');
         $role = Role::findOrFail($id);
         $permissions = config('permissions');
 
@@ -63,6 +67,7 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->authorizeAction('roles', 'update', 'Anda tidak memiliki akses untuk mengedit role dan hak akses.');
         $data = $request->validate([
             'name' => 'required|unique:roles,name,' . $id,
             'display_name' => 'required',
@@ -80,6 +85,7 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
+        $this->authorizeAction('roles', 'delete', 'Anda tidak memiliki akses untuk menghapus role dan hak akses.');
         $role = Role::findOrFail($id);
         $role->delete();
 

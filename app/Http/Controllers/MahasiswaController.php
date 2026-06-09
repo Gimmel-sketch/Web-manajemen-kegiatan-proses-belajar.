@@ -9,17 +9,20 @@ class MahasiswaController extends Controller
 {
     public function index()
     {
+        $this->authorizeAction('mahasiswa', 'view', 'Anda tidak memiliki akses untuk melihat data mahasiswa.');
         $mahasiswa = Mahasiswa::all();
         return view('Data-mahasiswa', compact('mahasiswa'));
     }
 
     public function create()
     {
+        $this->authorizeAction('mahasiswa', 'create', 'Anda tidak memiliki akses untuk menambah data mahasiswa.');
         return view('Create-mahasiswa');
     }
 
     public function store(Request $request)
     {
+        $this->authorizeAction('mahasiswa', 'create', 'Anda tidak memiliki akses untuk menambah data mahasiswa.');
         Mahasiswa::create([
             'nim'    => $request->nim,
             'nama'   => $request->nama,
@@ -48,12 +51,14 @@ class MahasiswaController extends Controller
 
     public function edit($nim)
     {
+        $this->authorizeAction('mahasiswa', 'update', 'Anda tidak memiliki akses untuk mengedit data mahasiswa.');
         $mahasiswa = Mahasiswa::findOrFail($nim);
         return view('edit-mahasiswa', compact('mahasiswa'));
     }
 
     public function update(Request $request, $nim)
     {
+        $this->authorizeAction('mahasiswa', 'update', 'Anda tidak memiliki akses untuk mengedit data mahasiswa.');
         $mahasiswa = Mahasiswa::findOrFail($nim);
 
         $mahasiswa->update([
@@ -79,6 +84,7 @@ class MahasiswaController extends Controller
 
     public function destroy($nim)
     {
+        $this->authorizeAction('mahasiswa', 'delete', 'Anda tidak memiliki akses untuk menghapus data mahasiswa.');
         $mahasiswa = Mahasiswa::findOrFail($nim);
         $mahasiswa->delete();
 

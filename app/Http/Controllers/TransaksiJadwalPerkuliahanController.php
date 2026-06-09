@@ -12,6 +12,7 @@ class TransaksiJadwalPerkuliahanController extends Controller
 {
     public function index()
     {
+        $this->authorizeAction('jadwal_perkuliahan', 'view', 'Anda tidak memiliki akses untuk melihat data jadwal perkuliahan.');
         $jadwalPerkuliahan = TransaksiJadwalPerkuliahan::with(['mataKuliah', 'dosen', 'ruangan'])
             ->orderBy('hari')
             ->orderBy('jam_mulai')
@@ -22,11 +23,13 @@ class TransaksiJadwalPerkuliahanController extends Controller
 
     public function create()
     {
+        $this->authorizeAction('jadwal_perkuliahan', 'create', 'Anda tidak memiliki akses untuk menambah jadwal perkuliahan.');
         return view('jadwal-perkuliahan.create', $this->formData());
     }
 
     public function store(Request $request)
     {
+        $this->authorizeAction('jadwal_perkuliahan', 'create', 'Anda tidak memiliki akses untuk menambah jadwal perkuliahan.');
         $data = $request->validate($this->rules());
 
         TransaksiJadwalPerkuliahan::create($data);
@@ -36,6 +39,7 @@ class TransaksiJadwalPerkuliahanController extends Controller
 
     public function edit(TransaksiJadwalPerkuliahan $jadwalPerkuliahan)
     {
+        $this->authorizeAction('jadwal_perkuliahan', 'update', 'Anda tidak memiliki akses untuk mengedit jadwal perkuliahan.');
         return view('jadwal-perkuliahan.edit', array_merge($this->formData(), [
             'jadwalPerkuliahan' => $jadwalPerkuliahan,
         ]));
@@ -43,6 +47,7 @@ class TransaksiJadwalPerkuliahanController extends Controller
 
     public function update(Request $request, TransaksiJadwalPerkuliahan $jadwalPerkuliahan)
     {
+        $this->authorizeAction('jadwal_perkuliahan', 'update', 'Anda tidak memiliki akses untuk mengedit jadwal perkuliahan.');
         $data = $request->validate($this->rules());
         $jadwalPerkuliahan->update($data);
 
@@ -51,6 +56,7 @@ class TransaksiJadwalPerkuliahanController extends Controller
 
     public function destroy(TransaksiJadwalPerkuliahan $jadwalPerkuliahan)
     {
+        $this->authorizeAction('jadwal_perkuliahan', 'delete', 'Anda tidak memiliki akses untuk menghapus jadwal perkuliahan.');
         $jadwalPerkuliahan->delete();
 
         return redirect()->route('jadwal-perkuliahan.index')->with('success', 'Jadwal perkuliahan berhasil dihapus.');

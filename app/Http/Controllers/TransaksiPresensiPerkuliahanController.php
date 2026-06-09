@@ -11,6 +11,7 @@ class TransaksiPresensiPerkuliahanController extends Controller
 {
     public function index()
     {
+        $this->authorizeAction('presensi_perkuliahan', 'view', 'Anda tidak memiliki akses untuk melihat data presensi perkuliahan.');
         $presensiPerkuliahan = TransaksiPresensiPerkuliahan::with(['jadwalPerkuliahan.mataKuliah', 'mahasiswa'])
             ->latest('tanggal')
             ->get();
@@ -20,11 +21,13 @@ class TransaksiPresensiPerkuliahanController extends Controller
 
     public function create()
     {
+        $this->authorizeAction('presensi_perkuliahan', 'create', 'Anda tidak memiliki akses untuk menambah presensi perkuliahan.');
         return view('presensi-perkuliahan.create', $this->formData());
     }
 
     public function store(Request $request)
     {
+        $this->authorizeAction('presensi_perkuliahan', 'create', 'Anda tidak memiliki akses untuk menambah presensi perkuliahan.');
         $data = $request->validate($this->rules());
 
         TransaksiPresensiPerkuliahan::create($data);
@@ -34,6 +37,7 @@ class TransaksiPresensiPerkuliahanController extends Controller
 
     public function edit(TransaksiPresensiPerkuliahan $presensiPerkuliahan)
     {
+        $this->authorizeAction('presensi_perkuliahan', 'update', 'Anda tidak memiliki akses untuk mengedit presensi perkuliahan.');
         return view('presensi-perkuliahan.edit', array_merge($this->formData(), [
             'presensiPerkuliahan' => $presensiPerkuliahan,
         ]));
@@ -41,6 +45,7 @@ class TransaksiPresensiPerkuliahanController extends Controller
 
     public function update(Request $request, TransaksiPresensiPerkuliahan $presensiPerkuliahan)
     {
+        $this->authorizeAction('presensi_perkuliahan', 'update', 'Anda tidak memiliki akses untuk mengedit presensi perkuliahan.');
         $data = $request->validate($this->rules());
         $presensiPerkuliahan->update($data);
 
@@ -49,6 +54,7 @@ class TransaksiPresensiPerkuliahanController extends Controller
 
     public function destroy(TransaksiPresensiPerkuliahan $presensiPerkuliahan)
     {
+        $this->authorizeAction('presensi_perkuliahan', 'delete', 'Anda tidak memiliki akses untuk menghapus presensi perkuliahan.');
         $presensiPerkuliahan->delete();
 
         return redirect()->route('presensi-perkuliahan.index')->with('success', 'Presensi perkuliahan berhasil dihapus.');

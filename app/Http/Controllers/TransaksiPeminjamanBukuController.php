@@ -11,17 +11,23 @@ class TransaksiPeminjamanBukuController extends Controller
 {
     public function index()
     {
+        $this->authorizeAction('peminjaman_buku', 'view', 'Anda tidak memiliki akses untuk melihat data peminjaman buku.');
+
         $peminjamanBuku = TransaksiPeminjamanBuku::with(['mahasiswa', 'buku'])->latest()->get();
         return view('peminjaman-buku.index', compact('peminjamanBuku'));
     }
 
     public function create()
     {
+        $this->authorizeAction('peminjaman_buku', 'create', 'Anda tidak memiliki akses untuk menambah peminjaman buku.');
+
         return view('peminjaman-buku.create', $this->formData());
     }
 
     public function store(Request $request)
     {
+        $this->authorizeAction('peminjaman_buku', 'create', 'Anda tidak memiliki akses untuk menambah peminjaman buku.');
+
         $data = $request->validate($this->rules());
 
         TransaksiPeminjamanBuku::create($data);
@@ -31,11 +37,15 @@ class TransaksiPeminjamanBukuController extends Controller
 
     public function edit(TransaksiPeminjamanBuku $peminjamanBuku)
     {
+        $this->authorizeAction('peminjaman_buku', 'update', 'Anda tidak memiliki akses untuk mengedit peminjaman buku.');
+
         return view('peminjaman-buku.edit', array_merge($this->formData(), compact('peminjamanBuku')));
     }
 
     public function update(Request $request, TransaksiPeminjamanBuku $peminjamanBuku)
     {
+        $this->authorizeAction('peminjaman_buku', 'update', 'Anda tidak memiliki akses untuk mengedit peminjaman buku.');
+
         $data = $request->validate($this->rules());
         $peminjamanBuku->update($data);
 
@@ -44,6 +54,8 @@ class TransaksiPeminjamanBukuController extends Controller
 
     public function destroy(TransaksiPeminjamanBuku $peminjamanBuku)
     {
+        $this->authorizeAction('peminjaman_buku', 'delete', 'Anda tidak memiliki akses untuk menghapus peminjaman buku.');
+
         $peminjamanBuku->delete();
 
         return redirect()->route('peminjaman-buku.index')->with('success', 'Data peminjaman buku berhasil dihapus.');

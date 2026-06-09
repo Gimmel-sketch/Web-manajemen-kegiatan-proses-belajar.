@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             [
                 'display_name' => 'Dosen',
                 'description' => 'Akses penuh ke semua fitur',
-                'permissions' => $allPermissions,
+                'permissions' => [],
             ]
         );
 

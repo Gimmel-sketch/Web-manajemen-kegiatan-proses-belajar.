@@ -18,18 +18,10 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
     public function role(): BelongsTo
     {
@@ -41,14 +33,13 @@ class User extends Authenticatable
         $roles = (array) $roles;
 
         return $this->role !== null && in_array($this->role->name, $roles, true);
+
     }
 
     public function hasPermission(string $permission): bool
     {
-        if ($this->hasRole('admin')) {
-            return true;
-        }
-
+        // Permission sepenuhnya mengikuti konfigurasi role->permissions (yang diatur dari website)
         return $this->role !== null && $this->role->hasPermission($permission);
     }
 }
+

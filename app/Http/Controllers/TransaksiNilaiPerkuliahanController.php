@@ -11,6 +11,7 @@ class TransaksiNilaiPerkuliahanController extends Controller
 {
     public function index()
     {
+        $this->authorizeAction('nilai_perkuliahan', 'view', 'Anda tidak memiliki akses untuk melihat data nilai perkuliahan.');
         $nilaiPerkuliahan = TransaksiNilaiPerkuliahan::with(['transaksiKrs.mahasiswa', 'transaksiKrs.mataKuliah'])
             ->latest()
             ->get();
@@ -20,11 +21,13 @@ class TransaksiNilaiPerkuliahanController extends Controller
 
     public function create()
     {
+        $this->authorizeAction('nilai_perkuliahan', 'create', 'Anda tidak memiliki akses untuk menambah nilai perkuliahan.');
         return view('nilai-perkuliahan.create', $this->formData());
     }
 
     public function store(Request $request)
     {
+        $this->authorizeAction('nilai_perkuliahan', 'create', 'Anda tidak memiliki akses untuk menambah nilai perkuliahan.');
         $data = $request->validate($this->rules());
 
         TransaksiNilaiPerkuliahan::create($data);
@@ -34,6 +37,7 @@ class TransaksiNilaiPerkuliahanController extends Controller
 
     public function edit(TransaksiNilaiPerkuliahan $nilaiPerkuliahan)
     {
+        $this->authorizeAction('nilai_perkuliahan', 'update', 'Anda tidak memiliki akses untuk mengedit nilai perkuliahan.');
         return view('nilai-perkuliahan.edit', array_merge($this->formData(), [
             'nilaiPerkuliahan' => $nilaiPerkuliahan,
         ]));
@@ -41,6 +45,7 @@ class TransaksiNilaiPerkuliahanController extends Controller
 
     public function update(Request $request, TransaksiNilaiPerkuliahan $nilaiPerkuliahan)
     {
+        $this->authorizeAction('nilai_perkuliahan', 'update', 'Anda tidak memiliki akses untuk mengedit nilai perkuliahan.');
         $data = $request->validate($this->rules($nilaiPerkuliahan));
         $nilaiPerkuliahan->update($data);
 
@@ -49,6 +54,7 @@ class TransaksiNilaiPerkuliahanController extends Controller
 
     public function destroy(TransaksiNilaiPerkuliahan $nilaiPerkuliahan)
     {
+        $this->authorizeAction('nilai_perkuliahan', 'delete', 'Anda tidak memiliki akses untuk menghapus nilai perkuliahan.');
         $nilaiPerkuliahan->delete();
 
         return redirect()->route('nilai-perkuliahan.index')->with('success', 'Nilai perkuliahan berhasil dihapus.');
