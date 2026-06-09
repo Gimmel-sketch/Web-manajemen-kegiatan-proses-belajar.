@@ -14,7 +14,7 @@
                     <table class="table table-bordered table-striped table-hover align-middle mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th style="width: 1%;">#</th>
+                                <th style="width: 1%;">No</th>
                                 <th>Nama</th>
                                 <th>NIM</th>
                                 <th>Alamat</th>

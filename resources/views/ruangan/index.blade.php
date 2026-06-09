@@ -13,7 +13,7 @@
         <table class="table table-bordered table-striped align-middle mb-0">
             <thead class="table-dark">
                 <tr>
-                    <th>#</th>
+                    <th>No</th>
                     <th>Nama Ruangan</th>
                     <th>Kapasitas</th>
                     <th>Aksi</th>
