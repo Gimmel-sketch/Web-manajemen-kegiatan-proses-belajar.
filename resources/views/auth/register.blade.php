@@ -23,17 +23,6 @@
                                 <label for="email" class="form-label">Email</label>
                                 <input id="email" type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="nama@email.com" required>
                             </div>
-                            <div class="col-12">
-                                <label for="role_id" class="form-label">Role</label>
-                                <select id="role_id" name="role_id" class="form-select">
-                                    <option value="">User default</option>
-                                    @foreach($roles as $role)
-                                        <option value="{{ $role->id }}" @selected(old('role_id') == $role->id)>
-                                            {{ $role->display_name }} ({{ $role->name }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
                             <div class="col-md-6">
                                 <label for="password" class="form-label">Password</label>
                                 <input id="password" type="password" name="password" class="form-control" placeholder="Password" required>
