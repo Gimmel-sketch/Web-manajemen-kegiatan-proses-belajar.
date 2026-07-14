@@ -19,6 +19,7 @@
                     <th>Semester Tempuh</th>
                     <th>Tahun Akademik</th>
                     <th>Status</th>
+                    <th>Fuzzy</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -66,9 +67,20 @@
                                 <button class="btn btn-danger btn-sm" type="submit">Hapus</button>
                             </form>
                         </td>
+                        <td>
+                            @if(isset($item->fuzzy_kelayakan))
+                                @php $f = $item->fuzzy_kelayakan; @endphp
+                                <span class="badge {{ $f['label'] === 'SangatLayak' ? 'text-bg-success' : ($f['label'] === 'Layak' ? 'text-bg-primary' : ($f['label'] === 'KurangLayak' ? 'text-bg-warning' : 'text-bg-danger')) }}">
+                                    {{ str_replace(['TidakLayak', 'KurangLayak', 'SangatLayak'], ['Tidak Layak', 'Kurang Layak', 'Sangat Layak'], $f['label']) }}
+                                </span>
+                                <small class="d-block text-muted">Skor: {{ $f['skor'] }}</small>
+                            @else
+                                <span class="text-muted">-</span>
+                            @endif
+                        </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="text-center text-muted py-4">Belum ada data KRS.</td></tr>
+                    <tr><td colspan="8" class="text-center text-muted py-4">Belum ada data KRS.</td></tr>
                 @endforelse
             </tbody>
         </table>

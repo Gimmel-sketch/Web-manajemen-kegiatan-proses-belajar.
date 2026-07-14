@@ -82,6 +82,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:mahasiswa.view')->group(function () {
         Route::get('Data-mahasiswa', [MahasiswaController::class, 'index'])
             ->name('Data-mahasiswa');
+        Route::get('mahasiswa/{nim}/evaluasi', [MahasiswaController::class, 'evaluasi'])
+            ->name('mahasiswa.evaluasi');
     });
 
     Route::middleware('permission:mahasiswa.update')->group(function () {
@@ -149,6 +151,9 @@ Route::middleware('auth')->group(function () {
         ->middlewareFor(['create', 'store'], 'permission:nilai_perkuliahan.create')
         ->middlewareFor(['edit', 'update'], 'permission:nilai_perkuliahan.update')
         ->middlewareFor('destroy', 'permission:nilai_perkuliahan.delete');
+    Route::get('nilai-perkuliahan/{nilaiPerkuliahan}/fuzzy-detail', [TransaksiNilaiPerkuliahanController::class, 'fuzzyDetail'])
+        ->middleware('permission:nilai_perkuliahan.view')
+        ->name('nilai-perkuliahan.fuzzy-detail');
     Route::resource('pembayaran-ukt', TransaksiPembayaranUktController::class)->except(['show'])
         ->middlewareFor('index', 'permission:pembayaran_ukt.view')
         ->middlewareFor(['create', 'store'], 'permission:pembayaran_ukt.create')

@@ -13,6 +13,7 @@ class TransaksiKrs extends Model
         'kode_mk',
         'semester_tempuh',
         'tahun_akademik',
+        'keterangan',
         'status_verifikasi',
         'verified_at',
         'verified_by',

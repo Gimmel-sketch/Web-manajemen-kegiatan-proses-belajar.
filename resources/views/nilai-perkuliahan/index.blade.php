@@ -22,6 +22,7 @@
                     <th>Akhir</th>
                     <th>Huruf</th>
                     <th>Aksi</th>
+                    <th>Fuzzy</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,9 +44,14 @@
                                 <button class="btn btn-danger btn-sm" type="submit">Hapus</button>
                             </form>
                         </td>
+                        <td>
+                            <a class="btn btn-outline-info btn-sm" href="{{ route('nilai-perkuliahan.fuzzy-detail', $item) }}" title="Lihat detail fuzzy">
+                                Fuzzy
+                            </a>
+                        </td>
                     </tr>
                 @empty
-                    <tr><td colspan="9" class="text-center text-muted py-4">Belum ada nilai perkuliahan.</td></tr>
+                    <tr><td colspan="10" class="text-center text-muted py-4">Belum ada nilai perkuliahan.</td></tr>
                 @endforelse
             </tbody>
         </table>

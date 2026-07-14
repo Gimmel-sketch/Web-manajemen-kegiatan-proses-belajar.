@@ -4,11 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\TransaksiKrs;
 use App\Models\TransaksiNilaiPerkuliahan;
+use App\Services\FuzzyNilaiService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class TransaksiNilaiPerkuliahanController extends Controller
 {
+    protected FuzzyNilaiService $fuzzyNilai;
+
+    public function __construct()
+    {
+        $this->fuzzyNilai = new FuzzyNilaiService();
+    }
+
     public function index()
     {
         $this->authorizeAction('nilai_perkuliahan', 'view', 'Anda tidak memiliki akses untuk melihat data nilai perkuliahan.');
@@ -30,9 +38,13 @@ class TransaksiNilaiPerkuliahanController extends Controller
         $this->authorizeAction('nilai_perkuliahan', 'create', 'Anda tidak memiliki akses untuk menambah nilai perkuliahan.');
         $data = $request->validate($this->rules());
 
+        $fuzzyResult = $this->fuzzyNilai->hitung($data['nilai_tugas'] ?? null, $data['nilai_uts'] ?? null, $data['nilai_uas'] ?? null);
+        $data['nilai_akhir'] = $fuzzyResult['nilai_akhir'];
+        $data['nilai_huruf'] = $fuzzyResult['nilai_huruf'];
+
         TransaksiNilaiPerkuliahan::create($data);
 
-        return redirect()->route('nilai-perkuliahan.index')->with('success', 'Nilai perkuliahan berhasil ditambahkan.');
+        return redirect()->route('nilai-perkuliahan.index')->with('success', 'Nilai perkuliahan berhasil ditambahkan (Fuzzy Logic).');
     }
 
     public function edit(TransaksiNilaiPerkuliahan $nilaiPerkuliahan)
@@ -47,9 +59,14 @@ class TransaksiNilaiPerkuliahanController extends Controller
     {
         $this->authorizeAction('nilai_perkuliahan', 'update', 'Anda tidak memiliki akses untuk mengedit nilai perkuliahan.');
         $data = $request->validate($this->rules($nilaiPerkuliahan));
+
+        $fuzzyResult = $this->fuzzyNilai->hitung($data['nilai_tugas'] ?? null, $data['nilai_uts'] ?? null, $data['nilai_uas'] ?? null);
+        $data['nilai_akhir'] = $fuzzyResult['nilai_akhir'];
+        $data['nilai_huruf'] = $fuzzyResult['nilai_huruf'];
+
         $nilaiPerkuliahan->update($data);
 
-        return redirect()->route('nilai-perkuliahan.index')->with('success', 'Nilai perkuliahan berhasil diperbarui.');
+        return redirect()->route('nilai-perkuliahan.index')->with('success', 'Nilai perkuliahan berhasil diperbarui (Fuzzy Logic).');
     }
 
     public function destroy(TransaksiNilaiPerkuliahan $nilaiPerkuliahan)
@@ -58,6 +75,14 @@ class TransaksiNilaiPerkuliahanController extends Controller
         $nilaiPerkuliahan->delete();
 
         return redirect()->route('nilai-perkuliahan.index')->with('success', 'Nilai perkuliahan berhasil dihapus.');
+    }
+
+    public function fuzzyDetail(TransaksiNilaiPerkuliahan $nilaiPerkuliahan)
+    {
+        $this->authorizeAction('nilai_perkuliahan', 'view');
+        $fuzzyResult = $this->fuzzyNilai->hitung($nilaiPerkuliahan->nilai_tugas, $nilaiPerkuliahan->nilai_uts, $nilaiPerkuliahan->nilai_uas);
+        $nilaiPerkuliahan->load(['transaksiKrs.mahasiswa', 'transaksiKrs.mataKuliah']);
+        return view('nilai-perkuliahan.fuzzy-detail', compact('nilaiPerkuliahan', 'fuzzyResult'));
     }
 
     private function rules(?TransaksiNilaiPerkuliahan $nilaiPerkuliahan = null): array

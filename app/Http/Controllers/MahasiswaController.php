@@ -3,15 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
+use App\Models\TransaksiNilaiPerkuliahan;
+use App\Services\FuzzyMahasiswaService;
 use Illuminate\Http\Request;
 
 class MahasiswaController extends Controller
 {
+    protected FuzzyMahasiswaService $fuzzyMahasiswa;
+
+    public function __construct()
+    {
+        $this->fuzzyMahasiswa = new FuzzyMahasiswaService();
+    }
+
     public function index()
     {
         $this->authorizeAction('mahasiswa', 'view', 'Anda tidak memiliki akses untuk melihat data mahasiswa.');
-        $mahasiswa = Mahasiswa::all();
+        $mahasiswa = Mahasiswa::with('nilaiPerkuliahan')->get();
         return view('Data-mahasiswa', compact('mahasiswa'));
+    }
+
+    public function evaluasi($nim)
+    {
+        $this->authorizeAction('mahasiswa', 'view', 'Anda tidak memiliki akses untuk melihat data mahasiswa.');
+        $mahasiswa = Mahasiswa::with(['transaksiKrs.mataKuliah', 'nilaiPerkuliahan'])->findOrFail($nim);
+
+        $rataNilai = $mahasiswa->rata_nilai;
+        $ipk = $mahasiswa->ipk;
+        $sksLulus = $mahasiswa->total_sks_lulus;
+
+        $fuzzyResult = $this->fuzzyMahasiswa->evaluasi($rataNilai, $ipk, $sksLulus);
+
+        $nilaiDetail = TransaksiNilaiPerkuliahan::with(['transaksiKrs.mataKuliah'])
+            ->whereHas('transaksiKrs', function ($q) use ($nim) {
+                $q->where('nim', $nim);
+            })
+            ->get();
+
+        return view('mahasiswa.evaluasi', compact('mahasiswa', 'fuzzyResult', 'rataNilai', 'ipk', 'sksLulus', 'nilaiDetail'));
     }
 
     public function create()

@@ -55,7 +55,7 @@
                                     <td>
                                         <div class="d-flex gap-2">
                                             <a class="btn btn-warning btn-sm" href="{{ route('edit-mahasiswa', $item->nim) }}">Edit</a>
-
+                                            <a class="btn btn-outline-info btn-sm" href="{{ route('mahasiswa.evaluasi', $item->nim) }}" title="Evaluasi Fuzzy">Fuzzy</a>
                                             <form action="{{ route('hapus-mahasiswa', $item->nim) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
