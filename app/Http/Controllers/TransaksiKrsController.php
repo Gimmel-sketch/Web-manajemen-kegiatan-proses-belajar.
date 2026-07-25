@@ -32,7 +32,33 @@ class TransaksiKrsController extends Controller
             $item->fuzzy_kelayakan = $fuzzy;
         });
 
-        return view('transaksi-krs.index', compact('transaksiKrs'));
+        $krsPerMahasiswa = $transaksiKrs->groupBy('nim');
+
+        return view('transaksi-krs.index', compact('krsPerMahasiswa'));
+    }
+
+    public function byMahasiswa(string $nim)
+    {
+        $this->authorizeAction('krs', 'view', 'Anda tidak memiliki akses untuk melihat data KRS.');
+
+        $mahasiswa = Mahasiswa::with('nilaiPerkuliahan')->findOrFail($nim);
+
+        $transaksiKrs = TransaksiKrs::with(['mataKuliah', 'verifier'])
+            ->where('nim', $nim)
+            ->latest()
+            ->get();
+
+        $transaksiKrs->each(function ($item) {
+            $fuzzy = $this->fuzzyKrs->hitungKelayakan(
+                $item->mahasiswa?->ipk ?? 0,
+                $item->mataKuliah?->sks ?? 3,
+                $item->semester_tempuh,
+                70
+            );
+            $item->fuzzy_kelayakan = $fuzzy;
+        });
+
+        return view('transaksi-krs.detail', compact('mahasiswa', 'transaksiKrs'));
     }
 
     public function create()

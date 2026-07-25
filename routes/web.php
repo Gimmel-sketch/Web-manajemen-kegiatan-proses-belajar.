@@ -124,6 +124,9 @@ Route::middleware('auth')->group(function () {
         ->middlewareFor(['create', 'store'], 'permission:krs.create')
         ->middlewareFor(['edit', 'update'], 'permission:krs.update')
         ->middlewareFor('destroy', 'permission:krs.delete');
+    Route::get('transaksi-krs/mahasiswa/{nim}', [TransaksiKrsController::class, 'byMahasiswa'])
+        ->middleware('permission:krs.view')
+        ->name('transaksi-krs.by-mahasiswa');
     Route::put('transaksi-krs/{transaksiKr}/verify', [TransaksiKrsController::class, 'verify'])
         ->middleware(['role:admin', 'permission:krs.update'])
         ->name('transaksi-krs.verify');
