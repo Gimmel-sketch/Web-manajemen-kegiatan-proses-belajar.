@@ -13,45 +13,38 @@
         <table class="table table-bordered table-striped align-middle mb-0">
             <thead class="table-dark">
                 <tr>
-                    <th>No</th>
-                    <th>Mahasiswa</th>
-                    <th>Mata Kuliah</th>
-                    <th>Tugas</th>
-                    <th>UTS</th>
-                    <th>UAS</th>
-                    <th>Akhir</th>
-                    <th>Huruf</th>
+                    <th style="width: 1%;">No</th>
+                    <th>Nama</th>
+                    <th>NIM</th>
+                    <th>Fakultas</th>
+                    <th>Prodi</th>
+                    <th>Jumlah MK</th>
+                    <th>Rata-rata Nilai</th>
                     <th>Aksi</th>
-                    <th>Fuzzy</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($nilaiPerkuliahan as $item)
+                @forelse($nilaiPerMahasiswa as $nim => $items)
+                    @php
+                        $m = $items->first()->transaksiKrs?->mahasiswa;
+                        $rata = round($items->avg('nilai_akhir'), 2);
+                    @endphp
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->transaksiKrs?->mahasiswa?->nama }}<br><small class="text-muted">{{ $item->transaksiKrs?->nim }}</small></td>
-                        <td>{{ $item->transaksiKrs?->mataKuliah?->nama_mk }}<br><small class="text-muted">{{ $item->transaksiKrs?->kode_mk }}</small></td>
-                        <td>{{ $item->nilai_tugas ?? '-' }}</td>
-                        <td>{{ $item->nilai_uts ?? '-' }}</td>
-                        <td>{{ $item->nilai_uas ?? '-' }}</td>
-                        <td>{{ $item->nilai_akhir ?? '-' }}</td>
-                        <td>{{ $item->nilai_huruf ?? '-' }}</td>
+                        <td>{{ $m?->nama ?? 'N/A' }}</td>
+                        <td>{{ $nim }}</td>
+                        <td>{{ $m?->fakultas ?? '-' }}</td>
+                        <td>{{ $m?->prodi ?? '-' }}</td>
+                        <td>{{ $items->count() }} MK</td>
+                        <td>{{ $rata }}</td>
                         <td>
-                            <a class="btn btn-warning btn-sm" href="{{ route('nilai-perkuliahan.edit', $item) }}">Edit</a>
-                            <form class="d-inline" action="{{ route('nilai-perkuliahan.destroy', $item) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-danger btn-sm" type="submit">Hapus</button>
-                            </form>
-                        </td>
-                        <td>
-                            <a class="btn btn-outline-info btn-sm" href="{{ route('nilai-perkuliahan.fuzzy-detail', $item) }}" title="Lihat detail fuzzy">
-                                Fuzzy
+                            <a class="btn btn-info btn-sm" href="{{ route('nilai-perkuliahan.by-mahasiswa', $nim) }}">
+                                Detail
                             </a>
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="10" class="text-center text-muted py-4">Belum ada nilai perkuliahan.</td></tr>
+                    <tr><td colspan="8" class="text-center text-muted py-4">Belum ada nilai perkuliahan.</td></tr>
                 @endforelse
             </tbody>
         </table>

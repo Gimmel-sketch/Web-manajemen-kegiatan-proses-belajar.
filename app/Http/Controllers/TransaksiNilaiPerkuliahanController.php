@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mahasiswa;
 use App\Models\TransaksiKrs;
 use App\Models\TransaksiNilaiPerkuliahan;
 use App\Services\FuzzyNilaiService;
@@ -24,7 +25,26 @@ class TransaksiNilaiPerkuliahanController extends Controller
             ->latest()
             ->get();
 
-        return view('nilai-perkuliahan.index', compact('nilaiPerkuliahan'));
+        $nilaiPerMahasiswa = $nilaiPerkuliahan->groupBy(fn($i) => $i->transaksiKrs?->nim);
+
+        return view('nilai-perkuliahan.index', compact('nilaiPerMahasiswa'));
+    }
+
+    public function byMahasiswa(string $nim)
+    {
+        $this->authorizeAction('nilai_perkuliahan', 'view', 'Anda tidak memiliki akses untuk melihat data nilai perkuliahan.');
+
+        $mahasiswa = Mahasiswa::with('nilaiPerkuliahan')->findOrFail($nim);
+
+        $nilaiPerkuliahan = TransaksiNilaiPerkuliahan::with([
+            'transaksiKrs.mataKuliah',
+            'transaksiKrs.mahasiswa',
+        ])
+            ->whereHas('transaksiKrs', fn($q) => $q->where('nim', $nim))
+            ->latest()
+            ->get();
+
+        return view('nilai-perkuliahan.detail', compact('mahasiswa', 'nilaiPerkuliahan'));
     }
 
     public function create()

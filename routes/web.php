@@ -154,6 +154,9 @@ Route::middleware('auth')->group(function () {
         ->middlewareFor(['create', 'store'], 'permission:nilai_perkuliahan.create')
         ->middlewareFor(['edit', 'update'], 'permission:nilai_perkuliahan.update')
         ->middlewareFor('destroy', 'permission:nilai_perkuliahan.delete');
+    Route::get('nilai-perkuliahan/mahasiswa/{nim}', [TransaksiNilaiPerkuliahanController::class, 'byMahasiswa'])
+        ->middleware('permission:nilai_perkuliahan.view')
+        ->name('nilai-perkuliahan.by-mahasiswa');
     Route::get('nilai-perkuliahan/{nilaiPerkuliahan}/fuzzy-detail', [TransaksiNilaiPerkuliahanController::class, 'fuzzyDetail'])
         ->middleware('permission:nilai_perkuliahan.view')
         ->name('nilai-perkuliahan.fuzzy-detail');
