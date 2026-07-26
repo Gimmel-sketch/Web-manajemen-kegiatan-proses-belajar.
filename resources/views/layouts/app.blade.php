@@ -202,16 +202,16 @@
             padding: .75rem 1rem;
             font-weight: 600;
             font-size: .875rem;
-            background: #0f172a;
+            background: #2563eb;
             border: 0;
             transition: all .2s ease;
             height: 48px;
         }
 
         .auth-panel .btn-primary:hover {
-            background: #1e293b;
+            background: #1d4ed8;
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(15, 23, 42, .25);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, .35);
         }
 
         .auth-panel .form-check-input {
@@ -223,8 +223,8 @@
         }
 
         .auth-panel .form-check-input:checked {
-            background-color: #0f172a;
-            border-color: #0f172a;
+            background-color: #2563eb;
+            border-color: #2563eb;
         }
 
         .auth-panel .form-check-label {
@@ -332,6 +332,206 @@
         .stat-icon {
             width: 44px;
             height: 44px;
+        }
+
+        .page-header {
+            padding: 0 0 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .content-card {
+            border: 0;
+            border-radius: 14px;
+            box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+            overflow: hidden;
+        }
+
+        .content-card .card-header {
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .content-card .card-body {
+            padding: 1.5rem;
+        }
+
+        .table-modern {
+            margin: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table-modern thead th {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+            font-size: .8125rem;
+            padding: .75rem 1rem;
+            border-bottom: 1.5px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .table-modern tbody td {
+            padding: .75rem 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            font-size: .9375rem;
+        }
+
+        .table-modern tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .table-modern tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .btn-action {
+            border-radius: 8px;
+            padding: .35rem .75rem;
+            font-size: .8rem;
+            font-weight: 500;
+            transition: all .15s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-edit {
+            background: #fffbeb;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+        .btn-edit:hover { background: #fef3c7; color: #b45309; }
+
+        .btn-delete {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        .btn-delete:hover { background: #fee2e2; color: #b91c1c; }
+
+        .btn-view {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+        .btn-view:hover { background: #dbeafe; color: #1d4ed8; }
+
+        .btn-verify {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+        }
+        .btn-verify:hover { background: #dcfce7; color: #15803d; }
+
+        .btn-fuzzy {
+            background: #f5f3ff;
+            color: #7c3aed;
+            border: 1px solid #ddd6fe;
+        }
+        .btn-fuzzy:hover { background: #ede9fe; color: #6d28d9; }
+
+        .btn-add {
+            background: #2563eb;
+            color: #ffffff;
+            border: 0;
+            border-radius: 10px;
+            padding: .5rem 1.25rem;
+            font-weight: 600;
+            font-size: .85rem;
+            transition: all .15s ease;
+            text-decoration: none;
+        }
+        .btn-add:hover { background: #1d4ed8; color: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,.35); }
+
+        .btn-back {
+            background: #ffffff;
+            color: #475569;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            padding: .5rem 1rem;
+            font-weight: 500;
+            font-size: .85rem;
+            transition: all .15s ease;
+            text-decoration: none;
+        }
+        .btn-back:hover { background: #f8fafc; border-color: #cbd5e1; color: #0f172a; }
+
+        .btn-submit {
+            border-radius: 10px;
+            padding: .55rem 1.5rem;
+            font-weight: 600;
+            font-size: .875rem;
+            background: #2563eb;
+            color: #fff;
+            border: 0;
+            transition: all .15s ease;
+        }
+        .btn-submit:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,.35); }
+
+        .btn-cancel {
+            border-radius: 10px;
+            padding: .55rem 1.5rem;
+            font-weight: 500;
+            font-size: .875rem;
+            background: #ffffff;
+            color: #475569;
+            border: 1.5px solid #e2e8f0;
+            transition: all .15s ease;
+            text-decoration: none;
+        }
+        .btn-cancel:hover { background: #f8fafc; border-color: #cbd5e1; color: #0f172a; }
+
+        .empty-state {
+            padding: 3rem 1rem;
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        .fuzzy-alert {
+            border-radius: 12px;
+            border: 0;
+            padding: 1rem 1.25rem;
+        }
+
+        .form-section .form-label {
+            font-weight: 500;
+            color: #475569;
+            font-size: .8rem;
+            margin-bottom: .35rem;
+        }
+
+        .form-section .form-control,
+        .form-section .form-select {
+            border-radius: 10px;
+            padding: .55rem .85rem;
+            border: 1.5px solid #e2e8f0;
+            font-size: .875rem;
+            background: #f8fafc;
+            transition: all .15s ease;
+        }
+
+        .form-section .form-control:focus,
+        .form-section .form-select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+            background: #ffffff;
         }
 
         @media (max-width: 991.98px) {
