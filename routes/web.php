@@ -147,6 +147,9 @@ Route::middleware('auth')->group(function () {
         ->middlewareFor(['create', 'store'], 'permission:presensi_perkuliahan.create')
         ->middlewareFor(['edit', 'update'], 'permission:presensi_perkuliahan.update')
         ->middlewareFor('destroy', 'permission:presensi_perkuliahan.delete');
+    Route::get('presensi-perkuliahan/mahasiswa/{nim}', [TransaksiPresensiPerkuliahanController::class, 'byMahasiswa'])
+        ->middleware('permission:presensi_perkuliahan.view')
+        ->name('presensi-perkuliahan.by-mahasiswa');
     Route::resource('nilai-perkuliahan', TransaksiNilaiPerkuliahanController::class)
         ->parameters(['nilai-perkuliahan' => 'nilaiPerkuliahan'])
         ->except(['show'])

@@ -16,7 +16,26 @@ class TransaksiPresensiPerkuliahanController extends Controller
             ->latest('tanggal')
             ->get();
 
-        return view('presensi-perkuliahan.index', compact('presensiPerkuliahan'));
+        $presensiPerMahasiswa = $presensiPerkuliahan->groupBy('nim');
+
+        return view('presensi-perkuliahan.index', compact('presensiPerMahasiswa'));
+    }
+
+    public function byMahasiswa(string $nim)
+    {
+        $this->authorizeAction('presensi_perkuliahan', 'view', 'Anda tidak memiliki akses untuk melihat data presensi perkuliahan.');
+
+        $mahasiswa = Mahasiswa::findOrFail($nim);
+
+        $presensi = TransaksiPresensiPerkuliahan::with([
+            'jadwalPerkuliahan.mataKuliah',
+            'jadwalPerkuliahan.dosen',
+        ])
+            ->where('nim', $nim)
+            ->latest('tanggal')
+            ->get();
+
+        return view('presensi-perkuliahan.detail', compact('mahasiswa', 'presensi'));
     }
 
     public function create()
