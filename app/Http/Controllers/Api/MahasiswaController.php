@@ -10,12 +10,15 @@ use App\Models\TransaksiPembayaranUkt;
 use App\Services\FuzzyMahasiswaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MahasiswaController extends Controller
 {
     public function profile(): JsonResponse
     {
+        Log::info('Authenticated User:', ['user' => auth()->user()]);
         $mahasiswa = auth()->user()->mahasiswa;
+        Log::info('Mahasiswa relationship result:', ['mahasiswa' => $mahasiswa]);
 
         if (! $mahasiswa) {
             return response()->json(['message' => 'Mahasiswa tidak ditemukan.'], 404);
