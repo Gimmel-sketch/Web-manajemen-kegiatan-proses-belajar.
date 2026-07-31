@@ -1,0 +1,84 @@
+@startuml
+skinparam backgroundColor #FEFEFE
+
+start
+
+:Mahasiswa membuka halaman
+landing page sistem akademik;
+
+:Klik tombol **Masuk**;
+
+:Sistem menampilkan halaman login;
+
+repeat
+    :Mengisi **Email** dan **Password**;
+
+    :Klik tombol **Masuk**;
+
+    :Sistem memvalidasi kredensial
+    (AuthController@login);
+
+    if (Email dan password benar?) then (ya)
+        break
+    else (tidak)
+        :Tampilkan pesan
+        "Email atau password tidak sesuai";
+    endif
+repeat while (Kredensial belum valid?) is (ulangi)
+
+:Sistem membuat session login
+dan mengarahkan ke **Dashboard**;
+
+:Mahasiswa membuka menu **Transaksi KRS**
+dari sidebar;
+
+:Sistem menampilkan halaman
+**Data KRS** (index);
+
+:Klik tombol **Tambah KRS**;
+
+:Sistem menampilkan form
+**Tambah KRS**;
+
+repeat
+    :Mengisi form KRS:
+    Mahasiswa (NIM), Mata Kuliah,
+    Semester, Tahun Akademik;
+
+    :Sistem menampilkan rekomendasi
+    kelayakan fuzzy secara real-time;
+
+    :Klik tombol **Simpan**;
+
+    :Sistem memvalidasi data
+    (route transaksi-krs.store);
+
+    if (Data valid? nim & kode_mk ada) then (ya)
+        :Sistem menghitung kelayakan fuzzy
+        (FuzzyKrsService->hitungKelayakan);
+        :Menyimpan ke tabel transaksi_krs
+        dengan status **menunggu**;
+        break
+    else (tidak)
+        :Tampilkan pesan error
+        dan kembali ke form;
+    endif
+repeat while (Data belum valid?) is (ulangi)
+
+:Sistem redirect ke halaman
+**Data KRS** dengan pesan sukses;
+
+:Data KRS tampil di daftar
+dengan status **menunggu verifikasi**;
+
+partition "Verifikasi (dilakukan Admin)" {
+    :Admin memverifikasi KRS
+    (route transaksi-krs.verify);
+    :Status berubah menjadi **terverifikasi**;
+}
+
+:Sistem menampilkan KRS yang sudah
+**terverifikasi** kepada mahasiswa;
+
+stop
+@enduml

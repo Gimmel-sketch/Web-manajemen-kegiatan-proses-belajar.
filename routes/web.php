@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return auth()->check()
         ? redirect('/dashboard')
-        : redirect()->route('login');
+        : view('landing');
 });
 
 Route::middleware('guest')->group(function () {
